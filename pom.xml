@@ -61,7 +61,7 @@
     <dependency>
       <groupId>io.nayasis</groupId>
       <artifactId>basica</artifactId>
-      <version>0.3.0</version>
+      <version>0.3.1</version>
     </dependency>
 
     <!-- spring -->
@@ -179,7 +179,7 @@
     <profile>
       <id>github-private</id>
       <properties>
-        <github.global.server>github</github.global.server>
+        <github.global.server>github-private</github.global.server>
       </properties>
       <distributionManagement>
         <repository>
