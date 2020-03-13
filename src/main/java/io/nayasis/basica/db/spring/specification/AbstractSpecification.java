@@ -1,16 +1,16 @@
 package io.nayasis.basica.db.spring.specification;
 
-import io.nayasis.basica.base.Strings;
 import io.nayasis.basica.validation.Validator;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Collection;
 
-public class AbstractSpecification<T> {
+public abstract class AbstractSpecification<T> {
 
-    protected Specification<T> in( String key, List values ) {
+    protected Specification<T> in( String key, Collection values ) {
         return (Specification<T>) ( root, query, cb ) -> {
             if( Validator.isNotEmpty(values) ) {
                 Path<Object> column = getPath( root, key );
@@ -26,68 +26,127 @@ public class AbstractSpecification<T> {
 
     protected Specification<T> like( String key, String value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Strings.isNotEmpty(value) ) {
-                return cb.like( getPath(root, key), "%" + value + "%" );
-            }
-            return cb.conjunction();
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.like( getPath(root, key), "%" + value + "%" );
         };
     }
 
     protected Specification<T> notLike( String key, String value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Strings.isNotEmpty(value) ) {
-                return cb.notLike( getPath(root, key), "%" + value + "%" );
-            }
-            return cb.conjunction();
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.notLike( getPath(root, key), "%" + value + "%" );
+        };
+    }
+
+    protected Specification<T> isNull( String key ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            return cb.isNull( getPath(root, key) );
+        };
+    }
+
+    protected Specification<T> isNotNull( String key ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            return cb.isNotNull( getPath(root, key) );
         };
     }
 
     protected Specification<T> equal( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Strings.isNotEmpty(value) ) {
-                return cb.equal( getPath(root, key), value );
-            }
-            return cb.conjunction();
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.equal( getPath(root, key), value );
         };
     }
 
     protected Specification<T> lessThan( String key, String value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Strings.isNotEmpty(value) ) {
-                return cb.lessThan( getPath(root, key), value );
-            }
-            return cb.conjunction();
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.lessThan( getPath(root, key), value );
         };
     }
 
     protected Specification<T> lessThanOrEqual( String key, String value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Strings.isNotEmpty(value) ) {
-                return cb.lessThanOrEqualTo( getPath(root, key), value );
-            }
-            return cb.conjunction();
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.lessThanOrEqualTo( getPath(root, key), value );
         };
     }
 
     protected Specification<T> greaterThan( String key, String value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Strings.isNotEmpty(value) ) {
-                return cb.greaterThan( getPath(root, key), value );
-            }
-            return cb.conjunction();
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.greaterThan( getPath(root, key), value );
         };
     }
 
     protected Specification<T> greaterThanOrEqual( String key, String value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Strings.isNotEmpty(value) ) {
-                return cb.greaterThanOrEqualTo( getPath(root, key), value );
-            }
-            return cb.conjunction();
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.greaterThanOrEqualTo( getPath(root, key), value );
         };
     }
 
-    private Path getPath( Path expression, String key ) {
+    protected Specification<T> lessThan( String key, LocalDateTime value ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.lessThan( getPath(root, key), value );
+        };
+    }
+
+    protected Specification<T> lessThanOrEqual( String key, LocalDateTime value ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.lessThanOrEqualTo( getPath(root, key), value );
+        };
+    }
+
+    protected Specification<T> greaterThan( String key, LocalDateTime value ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.greaterThan( getPath(root, key), value );
+        };
+    }
+
+    protected Specification<T> greaterThanOrEqual( String key, LocalDateTime value ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.greaterThanOrEqualTo( getPath(root, key), value );
+        };
+    }
+
+    protected Specification<T> lessThan( String key, Integer value ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.lessThan( getPath(root, key), value );
+        };
+    }
+
+    protected Specification<T> lessThanOrEqual( String key, Integer value ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.lessThanOrEqualTo( getPath(root, key), value );
+        };
+    }
+
+    protected Specification<T> greaterThan( String key, Integer value ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.greaterThan( getPath(root, key), value );
+        };
+    }
+
+    protected Specification<T> greaterThanOrEqual( String key, Integer value ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            if( Validator.isEmpty(value) ) return cb.conjunction();
+            return cb.greaterThanOrEqualTo( getPath(root, key), value );
+        };
+    }
+
+
+    protected Specification<T> junction( Specification specification ) {
+        return (Specification<T>) specification;
+    }
+
+    protected Path getPath( Path expression, String key ) {
 
         if( expression == null ) return null;
 
