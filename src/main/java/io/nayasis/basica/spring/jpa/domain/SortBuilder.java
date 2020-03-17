@@ -1,4 +1,4 @@
-package io.nayasis.basica.db.spring.jpa.domain;
+package io.nayasis.basica.spring.jpa.domain;
 
 import io.nayasis.basica.base.Strings;
 import lombok.experimental.UtilityClass;
