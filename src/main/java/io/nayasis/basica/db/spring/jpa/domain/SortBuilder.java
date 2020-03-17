@@ -20,33 +20,40 @@ public class SortBuilder {
     /**
      * build sort rule
      *
-     * @param rule  sort rule like "key1,direction1 & key2, direction2 & ..."
-     *              ex. name,asc & id,desc
+     * @param rule  sort rule like "colA,direction1 &amp; colB direction2 &amp; ..."
+     *              ex. name,asc &amp; id,desc
      * @return query sorting rule
      */
-    public Sort build( String rule ) {
-        return build( rule, null );
+    public Sort toSort( String rule ) {
+        return toSort( rule, null );
     }
 
 
     /**
      * build sort rule
      *
-     * @param rule  sort rule like "key1,direction1 & key2, direction2 & ..."
-     *              ex. name,asc & id,desc
+     * @param rule  sort rule like "colA,direction1 &amp; colB direction2 &amp; ..."
+     *              ex. name,asc &amp; id,desc
      * @param defaultRule   default sort rule if rule is empty
      * @return query sorting rule
      */
-    public Sort build( String rule, String defaultRule ) {
+    public Sort toSort( String rule, String defaultRule ) {
         List<Order> orders = toOrders( rule );
         if( isEmpty(rule) )
             orders = toOrders( defaultRule );
         return Sort.by( orders );
     }
 
-    private static List<Order> toOrders( String rule ) {
+    /**
+     * build order rules
+     *
+     * @param rule order creation rule like colA,direction1 &amp; colB direction2 &amp; ..."
+     *             ex. name,asc &amp; id,desc
+     * @return multiple orders
+     */
+    public List<Order> toOrders( String rule ) {
         List<Order> orders = new ArrayList<>();
-        for (String param : Strings.split(rule, "&")) {
+        for( String param : Strings.split(rule, "&") ) {
             Order order = toOrder(param);
             if (order == null) continue;
             orders.add(order);
@@ -54,19 +61,37 @@ public class SortBuilder {
         return orders;
     }
 
-    public Order toOrder( String param ) {
+    /**
+     * build order
+     *
+     * @param rule order rule like "column,direction"
+     *             ex1. colA,desc
+     *             ex2. colA,asc
+     *             ex3. colA
+     * @return order
+     */
+    public Order toOrder( String rule ) {
 
-        List<String> words = Strings.split( param, "," );
+        List<String> words = Strings.split( rule, "," );
 
-        String col = words.size() > 0 ? words.get(0) : "";
-        String dir = words.size() > 1 ? words.get(1) : "";
+        String column    = words.size() > 0 ? words.get(0) : "";
+        String direction = words.size() > 1 ? words.get(1) : "";
 
-        if( isEmpty(col) ) return null;
+        if( isEmpty(column) ) return null;
 
-        Direction direction = dir.equalsIgnoreCase("desc") ? Direction.DESC : Direction.ASC ;
+        return new Order( toDirection(direction), column );
 
-        return new Order( direction, col );
+    }
 
+    private Direction toDirection( String direction ) {
+        switch ( Strings.toLowerCase(direction) ) {
+            case "desc" :
+                return Direction.DESC;
+            case "asc" :
+                return Direction.ASC;
+            default :
+                return Sort.DEFAULT_DIRECTION;
+        }
     }
 
 }
