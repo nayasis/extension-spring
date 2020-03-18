@@ -15,6 +15,18 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 public class ObjectMapperBuilder {
 
     public ObjectMapper fieldMapper() {
+        return fieldMapper( false );
+    }
+
+    public ObjectMapper fieldMapper( boolean removeXss ) {
+        ObjectMapper objectMapper = buildFieldMapper();
+        if( removeXss ) {
+            objectMapper.getFactory().setCharacterEscapes( new HtmlCharacterEscapes() );
+        }
+        return objectMapper;
+    }
+
+    private ObjectMapper buildFieldMapper() {
         return Jackson2ObjectMapperBuilder.json()
             .featuresToDisable( SerializationFeature.FAIL_ON_EMPTY_BEANS )
             .featuresToDisable( SerializationFeature.WRITE_DATES_AS_TIMESTAMPS )

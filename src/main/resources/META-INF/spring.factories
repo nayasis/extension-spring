@@ -1,9 +1,9 @@
 # Auto Configure
 
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  io.nayasis.spring.extension.autoconfigure.SpringExtension,\
   io.nayasis.spring.extension.config.error.ThrowableHandler,\
   io.nayasis.spring.extension.web.client.RequestSender,\
   io.nayasis.spring.extension.config.shutdown.graceful.undertow.GracefulShutdownHandlerWrapper,\
-  io.nayasis.spring.extension.config.shutdown.graceful.undertow.GracefulShutdownConfig,\
   io.nayasis.spring.extension.config.shutdown.graceful.undertow.GracefulShutdownEventListener,\
   io.nayasis.spring.extension.component.EmbeddedRedis

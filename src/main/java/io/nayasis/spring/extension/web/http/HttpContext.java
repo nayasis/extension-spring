@@ -6,6 +6,7 @@ import io.nayasis.basica.base.Types;
 import io.nayasis.spring.extension.web.http.mock.MockHttpServletRequest;
 import io.nayasis.spring.extension.web.http.mock.MockHttpServletResponse;
 import io.nayasis.basica.thread.local.ThreadRoot;
+import lombok.experimental.UtilityClass;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -34,48 +35,52 @@ import java.util.Map;
  * @author nayasis@gmail.com
  * @since 2015-08-28
  */
-@Service
-public class HttpContext implements ApplicationContextAware {
+@UtilityClass
+public class HttpContext {
 
-    private static HttpServletRequest  mockRequest  = new MockHttpServletRequest();
-    private static HttpServletResponse mockResponse = new MockHttpServletResponse();
-    private static ApplicationContext  context      = null;
+    private HttpServletRequest  mockRequest  = new MockHttpServletRequest();
+    private HttpServletResponse mockResponse = new MockHttpServletResponse();
+    private ApplicationContext  context      = null;
 
-    public static ApplicationContext ctx() {
+    public ApplicationContext ctx() {
         return context;
     }
 
-    public static ServletContext servletContext() {
+    public void ctx( ApplicationContext context ) {
+        HttpContext.context = context;
+    }
+
+    public ServletContext servletContext() {
         return request().getServletContext();
     }
 
-    private static ServletRequestAttributes servletAttributes() {
+    private ServletRequestAttributes servletAttributes() {
         return (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     }
 
-    public static HttpServletRequest request() {
+    public HttpServletRequest request() {
         ServletRequestAttributes attributes = servletAttributes();
         return attributes == null ? mockRequest : attributes.getRequest();
     }
 
-    public static HttpServletResponse response() {
+    public HttpServletResponse response() {
         ServletRequestAttributes attributes = servletAttributes();
         return attributes == null ? mockResponse : attributes.getResponse();
     }
 
-    public static String contextRoot() {
+    public String contextRoot() {
         return request().getContextPath();
     }
 
-    public static HttpSession session() {
+    public HttpSession session() {
         return session( false );
     }
 
-    public static HttpSession session( boolean create ) {
+    public HttpSession session( boolean create ) {
         return request().getSession( create );
     }
 
-    public static Map<String, String> headers() {
+    public Map<String, String> headers() {
 
         Map<String, String> header = new LinkedHashMap<>();
 
@@ -92,15 +97,15 @@ public class HttpContext implements ApplicationContextAware {
 
     }
 
-    public static String header( String key ) {
+    public String header( String key ) {
         return request().getHeader( key );
     }
 
-    public static String userAgent() {
+    public String userAgent() {
         return header( "user-agent" );
     }
 
-    public static Map<String,String> parameters() {
+    public Map<String,String> parameters() {
 
         HttpServletRequest request = servletAttributes().getRequest();
 
@@ -116,7 +121,7 @@ public class HttpContext implements ApplicationContextAware {
 
     }
 
-    public static HttpServletResponse setHeaderAsFileDownload( String fileName ) {
+    public HttpServletResponse setHeaderAsFileDownload( String fileName ) {
 
         String encodedFileName = escapeAsUrl( fileName );
 
@@ -131,38 +136,28 @@ public class HttpContext implements ApplicationContextAware {
 
     }
 
-    public static String escapeAsUrl( String fileName ) {
+    public String escapeAsUrl( String fileName ) {
         return UrlEscapers.urlFragmentEscaper().escape( fileName );
     }
 
     /**
-     * Spring Bean을 가져온다.
+     * return Spring bean.
      *
-     * @param klass Spring bean class
+     * @param klass bean class
      * @return Spring bean
      */
-    public static <T> T bean( Class<T> klass ) {
-        if( context == null ) {
-            return webApplicationContext().getBean( klass );
-        } else {
-            return context.getBean( klass );
-        }
+    public <T> T bean( Class<T> klass ) {
+        return context.getBean( klass );
     }
 
     /**
-     * Spring Bean 을 가져온다.
+     * return Spring bean.
      *
-     * @param beanName  bean 이름
+     * @param beanName  bean name
      * @return Spring bean
      */
-    public static Object bean( String beanName ) {
-
-        if( context == null ) {
-            return webApplicationContext().getBean( beanName );
-        } else {
-            return context.getBean( beanName );
-        }
-
+    public Object bean( String beanName ) {
+        return context.getBean( beanName );
     }
 
     /**
@@ -170,7 +165,7 @@ public class HttpContext implements ApplicationContextAware {
      *
      * @return 환경설정정보
      */
-    public static Environment environment() {
+    public Environment environment() {
         return HttpContext.bean( Environment.class );
     }
 
@@ -181,7 +176,7 @@ public class HttpContext implements ApplicationContextAware {
      * @param defaultValue  기본값
      * @return 환경정보
      */
-    public static String property( String key, String defaultValue ) {
+    public String property( String key, String defaultValue ) {
         Environment env = environment();
         if( env == null ) return defaultValue;
         return env.getProperty( key, defaultValue );
@@ -193,7 +188,7 @@ public class HttpContext implements ApplicationContextAware {
      * @param key  설정키
      * @return 환경정보
      */
-    public static String property( String key ) {
+    public String property( String key ) {
         return property( key, "" );
     }
 
@@ -202,7 +197,7 @@ public class HttpContext implements ApplicationContextAware {
      *
      * @return spring.profiles.active
      */
-    public static String activeProfile() {
+    public String activeProfile() {
         return property( "spring.profiles.active" );
     }
 
@@ -212,17 +207,8 @@ public class HttpContext implements ApplicationContextAware {
      * @param profile   비교할 profile 값
      * @return 일치여부
      */
-    public static boolean isActiveProfile( String profile ) {
+    public boolean isActiveProfile( String profile ) {
         return activeProfile().equals( profile );
-    }
-
-    /**
-     * WebApplicationContext를 구한다.
-     *
-     * @return WebApplicationContext
-     */
-    public static WebApplicationContext webApplicationContext() {
-        return WebApplicationContextUtils.getRequiredWebApplicationContext( request().getServletContext() );
     }
 
     /**
@@ -230,7 +216,7 @@ public class HttpContext implements ApplicationContextAware {
      *
      * @return txId 요청 request 식별용 txId
      */
-    public static String txId() {
+    public String txId() {
         return ThreadRoot.getKey();
     }
 
@@ -239,17 +225,17 @@ public class HttpContext implements ApplicationContextAware {
      * 접속한 사용자의 client IP를 구한다.
      * @return 접속한 사용자의 client IP
      */
-    public static String remoteIp() {
+    public String remoteIp() {
         String address = Strings.nvl( request().getRemoteAddr() );
         return address.replaceAll( ":", "." );
     }
 
     /**
-     * 현재 서버의 IP를 구한다.
+     * return IP of local host.
      *
-     * @return 현재 서버의 IP
+     * @return IP
      */
-    public static String localIp() {
+    public String localhostIp() {
         try {
             InetAddress ip = InetAddress.getLocalHost();
             return Strings.nvl( ip.getHostAddress() ).replaceAll( ":", "." );
@@ -258,13 +244,27 @@ public class HttpContext implements ApplicationContextAware {
         }
     }
 
-    public static List<Cookie> cookies() {
-        return Types.toList( request().getCookies() );
+    /**
+     * return hostname of local host.
+     *
+     * @return hostname
+     */
+    public String localhostName() {
+        try {
+            InetAddress ip = InetAddress.getLocalHost();
+            return Strings.nvl( ip.getHostName() );
+        } catch( UnknownHostException e ) {
+            return "";
+        }
     }
 
-    @Override
-    public void setApplicationContext( ApplicationContext applicationContext ) throws BeansException {
-        this.context = applicationContext;
+    /**
+     * return HTTP cookies.
+     *
+     * @return HTTP cookies.
+     */
+    public List<Cookie> cookies() {
+        return Types.toList( request().getCookies() );
     }
 
 }
