@@ -1,13 +1,14 @@
 package io.nayasis.spring.extension.web.http;
 
 import io.nayasis.basica.validation.Validator;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+@Component("cookies")
 public class Cookies {
 
     public Map<String,Cookie> getAll() {

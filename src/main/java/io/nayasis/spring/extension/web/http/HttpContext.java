@@ -32,7 +32,7 @@ import java.util.Map;
  * @author nayasis@gmail.com
  * @since 2015-08-28
  */
-@Component
+@Component("httpctx")
 public class HttpContext implements ApplicationContextAware {
 
     private static HttpServletRequest  mockRequest  = new MockHttpServletRequest();
