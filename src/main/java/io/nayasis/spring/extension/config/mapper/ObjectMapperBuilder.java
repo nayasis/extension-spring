@@ -1,6 +1,5 @@
 package io.nayasis.spring.extension.config.mapper;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -32,7 +31,6 @@ public class ObjectMapperBuilder {
             .featuresToDisable( SerializationFeature.WRITE_DATES_AS_TIMESTAMPS )
             .featuresToEnable( DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY )
             .featuresToEnable( JsonParser.Feature.ALLOW_SINGLE_QUOTES )
-            .serializationInclusion( JsonInclude.Include.NON_NULL )
             .visibility( PropertyAccessor.ALL, NONE )
             .visibility( PropertyAccessor.FIELD, ANY )
             .modules( new JavaTimeModule() )
