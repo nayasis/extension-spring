@@ -1,7 +1,6 @@
 package io.nayasis.spring.extension.web.client;
 
 import io.nayasis.spring.extension.web.client.interceptor.RestTemplateLoggingInterceptor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +18,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @since 2018-03-12
  */
 @Configuration
-@ConditionalOnMissingBean(RestOperations.class)
 public class RestOperationConfigure {
 
     @Bean
