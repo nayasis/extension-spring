@@ -2,7 +2,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.nayasis</groupId>
-  <artifactId>basica-sql</artifactId>
+  <artifactId>spring-extension</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <name>basica-sql</name>
   <description>SQL handling utility components</description>
