@@ -141,6 +141,7 @@ public class HttpContext implements ApplicationContextAware {
      * return Spring bean.
      *
      * @param klass bean class
+     * @param <T> return type of bean
      * @return Spring bean
      */
     public static <T> T bean( Class<T> klass ) {
@@ -151,6 +152,7 @@ public class HttpContext implements ApplicationContextAware {
      * return Spring bean.
      *
      * @param beanName  bean name
+     * @param <T> return type of bean
      * @return Spring bean
      */
     public static <T> T bean( String beanName ) {
