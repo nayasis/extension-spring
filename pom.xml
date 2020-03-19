@@ -4,7 +4,7 @@
   <groupId>io.nayasis</groupId>
   <artifactId>spring-extension</artifactId>
   <version>0.1.0-SNAPSHOT</version>
-  <name>basica-sql</name>
+  <name>spring-extension</name>
   <description>SQL handling utility components</description>
   <url>http://github.com/nayasis/basica-sql</url>
   <licenses>
