@@ -1,3 +1,3 @@
-# basica-sql
+# spring-extension
 
-SQL handling utility
+spring boot extension library

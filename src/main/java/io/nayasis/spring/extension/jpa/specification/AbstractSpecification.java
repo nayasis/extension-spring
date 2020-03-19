@@ -1,4 +1,4 @@
-package io.nayasis.basica.db.spring.jpa.specification;
+package io.nayasis.spring.extension.jpa.specification;
 
 import io.nayasis.basica.validation.Validator;
 import org.springframework.data.jpa.domain.Specification;
