@@ -77,15 +77,15 @@ public class HttpContext implements ApplicationContextAware {
         return request().getSession( create );
     }
 
-    public static Map<String, String> headers() {
+    public static Map<String,String> headers() {
 
-        Map<String, String> header = new LinkedHashMap<>();
+        Map<String,String> header = new LinkedHashMap<>();
 
         HttpServletRequest request = request();
 
         Enumeration<String> keys = request.getHeaderNames();
 
-        while( keys.hasMoreElements() ) {
+        while( keys != null && keys.hasMoreElements() ) {
             String key = keys.nextElement();
             header.put( key, request.getHeader( key ) );
         }
@@ -109,7 +109,7 @@ public class HttpContext implements ApplicationContextAware {
         Map<String, String> parameters = new LinkedHashMap<>();
         Enumeration<String> keys = request.getParameterNames();
 
-        while( keys.hasMoreElements() ) {
+        while( keys != null && keys.hasMoreElements() ) {
             String key = keys.nextElement();
             parameters.put( key, request.getParameter( key ) );
         }
@@ -161,20 +161,20 @@ public class HttpContext implements ApplicationContextAware {
     }
 
     /**
-     * SpringBoot environment 설정정보를 가져온다.
+     * return SpringBoot environment bean
      *
-     * @return 환경설정정보
+     * @return environment bean
      */
     public static Environment environment() {
         return HttpContext.bean( Environment.class );
     }
 
     /**
-     * application.properties 파일에 설정된 환경정보를 가져온다.
+     * return configuration value in application.properties(or yml)
      *
-     * @param key           설정키
-     * @param defaultValue  기본값
-     * @return 환경정보
+     * @param key           configuration key
+     * @param defaultValue  default value
+     * @return configuration value
      */
     public static String environment( String key, String defaultValue ) {
         Environment env = environment();
@@ -183,17 +183,17 @@ public class HttpContext implements ApplicationContextAware {
     }
 
     /**
-     * application.properties 파일에 설정된 환경정보를 가져온다.
+     * return configuration value in application.properties(or yml)
      *
-     * @param key  설정키
-     * @return 환경정보
+     * @param key  configuration key
+     * @return configuration value
      */
     public static String environment( String key ) {
         return environment( key, "" );
     }
 
     /**
-     * active profile 설정을 구한다.
+     * return active profile value.
      *
      * @return spring.profiles.active
      */
@@ -202,13 +202,13 @@ public class HttpContext implements ApplicationContextAware {
     }
 
     /**
-     * active profile 설정값을 비교한다.
+     * compare active profile value
      *
-     * @param profile   비교할 profile 값
-     * @return 일치여부
+     * @param profile   comparable profile value.
+     * @return true if current profile is equals with comparable profile (case-insensitive)
      */
     public static boolean isActiveProfile( String profile ) {
-        return activeProfile().equals( profile );
+        return activeProfile().equalsIgnoreCase( profile );
     }
 
     /**
