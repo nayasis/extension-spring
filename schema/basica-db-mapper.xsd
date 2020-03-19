@@ -139,7 +139,7 @@
       <xs:attribute name="open"      type="nm:notEmpty" />
       <xs:attribute name="close"     type="nm:notEmpty" />
       <xs:attribute name="concater"  type="nm:notEmpty" />
-      <xs:attribute name="indexKey"  type="nm:notEmpty" />
+      <xs:attribute name="index"     type="nm:notEmpty" />
     </xs:complexType>
   </xs:element>
 

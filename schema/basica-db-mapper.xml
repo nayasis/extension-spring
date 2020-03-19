@@ -129,23 +129,33 @@
     SELECT * FROM NYBATIS_TEST
   </sql>
 
-  <sql id="iftest">
+  <sql id="if">
     <!-- it is comments -->
     SELECT  *
     FROM    TB_SAMPLE A
     WHERE   tenant_id = 'S02'
-    <if test="#{id} %lt; 1">
+    <if test="id %lt; 1">
       AND     dataset_id &lt; A.test
-      <if test="#{id} > 3">
+      <if test="id > 3">
         AND   dataset_id > 1.2
       </if>
     </if>
-    <if test="#{id} = 2">
+    <if test="id = 2">
       AND     dataset_id &lt; 2.1
-      <if test="#{id} > 3">
+      <if test="id > 3">
         AND   dataset_id > 2.2
       </if>
     </if>
+    ORDER BY title
+  </sql>
+
+  <sql id="forEach">
+    SELECT  *
+    FROM    TABLE_SAMPLE
+    WHERE   1=1
+    <foreach key="names" open="AND (" close=")" concater="UNION ALL" index="index">
+      SELECT #{index} AS index, #{names} AS name FROM DUAL
+    </foreach>
     ORDER BY title
   </sql>
 
