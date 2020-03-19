@@ -1,6 +1,7 @@
 package io.nayasis.spring.extension.config.error;
 
 import io.nayasis.basica.base.Strings;
+import io.nayasis.spring.extension.exception.DomainException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +18,7 @@ import java.util.Map;
  * Error handler
  *
  * @author nayasis@gmail.com
- * @since 2016-03-04
+ * @since  2016-03-04
  */
 @Component
 @ConditionalOnMissingBean(ErrorAttributes.class)
@@ -28,7 +29,7 @@ public class ErrorHandler {
     private boolean includeException;
 
     @Autowired
-    private ThrowableHandler throwHandler;
+    private Throwables throwHandler;
 
     @Bean
     public ErrorAttributes errorAttributes() {
@@ -46,13 +47,13 @@ public class ErrorHandler {
                     if( includeException  ) attributes.put( "exception",   error.getClass().getName()   );
                     if( includeStackTrace ) attributes.put( "errorDetail", throwHandler.toString(error) );
 
-//                    if( error instanceof BizException ) {
-//                        attributes.put( "message", Strings.nvl( error.getMessage() ) );
-//                        attributes.put( "errorCd", ( (BizException) error ).errorCode() );
-//                    } else {
+                    if( error instanceof DomainException ) {
+                        attributes.put( "message", Strings.nvl( error.getMessage() ) );
+                        attributes.put( "errorCd", ( (DomainException) error ).errorCode() );
+                    } else {
                         attributes.put( "message", error.getMessage() );
                         attributes.put( "errorCd", Strings.nvl(attributes.get("status")) );
-//                    }
+                    }
 
                 }
 

@@ -8,7 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,9 @@ import java.util.List;
  * @author nayasis@gmail.com
  * @since 2015-12-03
  */
-@Service
+@Component
 @Slf4j
-public class ThrowableHandler implements ApplicationContextAware {
+public class Throwables implements ApplicationContextAware {
 
     @Value( "${server.error.filter:}" )
     private String errorFilter;
@@ -32,7 +32,6 @@ public class ThrowableHandler implements ApplicationContextAware {
 
         for( StackTraceElement e : throwable.getStackTrace() ) {
             if( Validator.isFound( e.toString(), errorFilter) ) continue;
-//            if( e.getClassName().contains( "SpringCGLIB" ) ) continue;
             list.add( e );
         }
         clone.setStackTrace( list.toArray( new StackTraceElement[] {} ) );
@@ -54,8 +53,8 @@ public class ThrowableHandler implements ApplicationContextAware {
     }
 
     public void logError( Throwable throwable ) {
-        Throwable filtered = filterStackTrace( throwable );
-        log.error(filtered.getMessage(), filtered);
+        Throwable e = filterStackTrace( throwable );
+        log.error( e.getMessage(), e );
     }
 
     @Override
