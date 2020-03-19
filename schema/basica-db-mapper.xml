@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<mapper xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:basica.db.mapper:1.0" xsi:schemaLocation="urn:basica.db.mapper:1.0 http://nybatis.github.io/schema/nybatis-mapper.xsd">-->
+<mapper xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:basica.db.mapper:1.0" xsi:schemaLocation="urn:basica.db.mapper:1.0">
+
+  <sql id="select" fetch="50">
+    SELECT  *
+    FROM    PROD
+    WHERE   list_id  = #{listId}
+    <!-- AND     rownum  <= #{rowNum} -->
+    ORDER BY ${orderKey}
+  </sql>
+
+  <sql id="select01" >
+    SELECT * FROM TABLE
+    <key id="11">aa
+    </key>
+    <key id="11">aa
+    </key>
+    <ref id="22"/>
+    <if test="aaaa">
+    </if>
+    <if test="s"></if>
+    <elseif test="aa"></elseif>
+    <else></else>
+    <if test="11">aa
+
+    </if>
+
+    <case>
+      <when test="aa"></when>
+      <else/>
+    </case>
+    <ref id="sss"></ref>
+    <group>
+      <if test="aa &lt; 1"></if>
+    </group>
+  </sql>
+
+  <sql id="select02" fetch="50">
+
+  </sql>
+
+  <sql id="selectKey" fetch="50">
+    <key id="listId">
+      SELECT 'A001'
+    </key>
+    <key id="rowNum">
+      SELECT 4
+    </key>
+    <key id="keyValue">
+      SELECT 'keyValue' AS key
+      UNION ALL
+      SELECT list_id
+      FROM   PROD
+      LIMIT  0, #{rowNum}
+    </key>
+    SELECT  *, ${} "key_value"
+    FROM    PROD
+    WHERE   list_id = #{listId}
+    LIMIT 0, #{rowNum}
+  </sql>
+
+  <sql id="insert">
+  INSERT
+  INTO   PROD
+  (
+    list_id,
+    prod_id,
+    price,
+    image
+  ) VALUES (
+    #{listId},
+    #{prodId},
+    #{price},
+    #{image}
+  )
+  </sql>
+
+  <sql id="delete" >
+  DELETE
+  FROM    PROD
+  WHERE   list_id = #{listId}
+  </sql>
+
+  <sql id="refOrigin" >
+    SELECT  *
+    FROM    TB_DP_LIST_PROD
+    WHERE   tenant_id = #{tenantId}
+    ORDER BY ${orderKey}
+  </sql>
+
+  <sql id="refTestInvalid">
+  SELECT *
+  FROM
+  (
+    <ref id="Sqlite.refOrigin2" />
+  )
+  WHERE rownum &lt;= 10
+  </sql>
+
+  <sql id="refTestValid">
+  SELECT *
+  FROM
+  (
+    <ref id="Sqlite.refOrigin" />
+  )
+  WHERE rownum &lt;= 10
+  </sql>
+
+  <sql id="selectForParamTest" fetch="50">
+    SELECT  *
+    FROM    PROD
+    WHERE   list_id  =  #{listId}
+    AND     ( prod_id  =  #{prodId} or prod_id = #{_globalSession_} )
+    AND     price    >= #{price:int}
+  </sql>
+
+  <sql id="selectForList" fetch="50">
+    SELECT  *
+    FROM    PROD
+    WHERE   list_id  =  #{listId}
+    ORDER BY prod_id
+  </sql>
+
+  <sql id="selectWithoutParam" fetch="50">
+    SELECT  *
+    FROM    PROD
+    WHERE   list_id  = 'A001'
+    ORDER BY prod_id
+  </sql>
+
+  <sql id="selectForMultiEnvironmentTest">
+    SELECT * FROM NYBATIS_TEST
+  </sql>
+
+  <sql id="iftest">
+    <!-- it is comments -->
+    SELECT  *
+    FROM    TB_SAMPLE A
+    WHERE   tenant_id = 'S02'
+    <if test="#{id} %lt; 1">
+      AND     dataset_id &lt; A.test
+      <if test="#{id} > 3">
+        AND   dataset_id > 1.2
+      </if>
+    </if>
+    <if test="#{id} = 2">
+      AND     dataset_id &lt; 2.1
+      <if test="#{id} > 3">
+        AND   dataset_id > 2.2
+      </if>
+    </if>
+    ORDER BY title
+  </sql>
+
+</mapper>
