@@ -4,6 +4,7 @@ import io.nayasis.basica.cli.CommandExecutor;
 import io.nayasis.basica.etc.Platforms;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 import redis.embedded.RedisServer;
 import redis.embedded.exceptions.EmbeddedRedisException;
@@ -18,6 +19,7 @@ import javax.annotation.PreDestroy;
  * @since 2020-03-17
  */
 @Component
+@ConditionalOnClass( RedisServer.class )
 @Slf4j
 public class EmbeddedRedis {
 
