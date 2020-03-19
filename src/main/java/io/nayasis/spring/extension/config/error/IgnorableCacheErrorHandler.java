@@ -1,4 +1,4 @@
-package io.nayasis.spring.extension.config.error.cache;
+package io.nayasis.spring.extension.config.error;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
