@@ -26,7 +26,7 @@ public class CaseSql extends BaseSql {
 			}
 		}
 
-		// move [else] element to last in gatering list
+		// move [else] element to last in gathering list
 		for( int i = 0, iCnt = caseElements.size() - 1; i <= iCnt; i++ ) {
 
 			BaseSql element = caseElements.get( i );
