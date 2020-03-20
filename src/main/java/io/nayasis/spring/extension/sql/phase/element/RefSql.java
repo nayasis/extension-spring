@@ -2,13 +2,13 @@ package io.nayasis.spring.extension.sql.phase.element;
 
 import io.nayasis.basica.base.Strings;
 import io.nayasis.spring.extension.sql.entity.QueryParameter;
-import io.nayasis.spring.extension.sql.phase.element.abstracts.SqlElement;
+import io.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
 
-public class RefSqlElement extends SqlElement {
+public class RefSql extends BaseSql {
 
 	private String referenceSqlId = null;
 
-	public RefSqlElement( String referenceSqlId ) {
+	public RefSql( String referenceSqlId ) {
 		if( Strings.isEmpty( referenceSqlId ) ) return;
 		this.referenceSqlId = referenceSqlId;
 	}

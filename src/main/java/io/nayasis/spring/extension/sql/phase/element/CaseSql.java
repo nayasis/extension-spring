@@ -2,13 +2,13 @@ package io.nayasis.spring.extension.sql.phase.element;
 
 import io.nayasis.basica.base.Strings;
 import io.nayasis.spring.extension.sql.entity.QueryParameter;
-import io.nayasis.spring.extension.sql.phase.element.abstracts.SqlElement;
-import io.nayasis.spring.extension.sql.phase.element.exception.QueryParseException;
+import io.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
+import org.springframework.expression.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CaseSqlElement extends SqlElement {
+public class CaseSql extends BaseSql {
 
 	private boolean childrenSorted = false;
 
@@ -16,12 +16,12 @@ public class CaseSqlElement extends SqlElement {
 
 		if( childrenSorted ) return;
 
-		List<SqlElement> caseElements = new ArrayList<>();
+		List<BaseSql> caseElements = new ArrayList<>();
 
 		// gethering [if & else] element
 
-		for( SqlElement element : children ) {
-			if( element instanceof IfSqlElement || element instanceof ElseSqlElement ) {
+		for( BaseSql element : children ) {
+			if( element instanceof IfSql || element instanceof ElseSql ) {
 				caseElements.add( element );
 			}
 		}
@@ -29,9 +29,9 @@ public class CaseSqlElement extends SqlElement {
 		// move [else] element to last in gatering list
 		for( int i = 0, iCnt = caseElements.size() - 1; i <= iCnt; i++ ) {
 
-			SqlElement element = caseElements.get( i );
+			BaseSql element = caseElements.get( i );
 
-			if( element instanceof ElseSqlElement ) {
+			if( element instanceof ElseSql ) {
 				caseElements.add( caseElements.remove(i) );
 				i--; iCnt--;
 			}
@@ -41,11 +41,11 @@ public class CaseSqlElement extends SqlElement {
 		// make first if !!
 		for( int i = 0, iCnt = caseElements.size() - 1; i <= iCnt; i++ ) {
 
-			SqlElement element = caseElements.get( i );
+			BaseSql element = caseElements.get( i );
 
-			if( element instanceof ElseSqlElement ) continue;
+			if( element instanceof ElseSql ) continue;
 
-			IfSqlElement ifSqlElement = (IfSqlElement) element;
+			IfSql ifSqlElement = (IfSql) element;
 
 			if( i == 0 ) {
 				if( isElseIfSeries( ifSqlElement ) ) {
@@ -60,10 +60,10 @@ public class CaseSqlElement extends SqlElement {
 		}
 
 		// change original children
-		List<SqlElement> newChildren = new ArrayList<>();
+		List<BaseSql> newChildren = new ArrayList<>();
 
-		for( SqlElement element : children ) {
-			if( element instanceof IfSqlElement || element instanceof ElseSqlElement ) {
+		for( BaseSql element : children ) {
+			if( element instanceof IfSql || element instanceof ElseSql ) {
 				newChildren.add( caseElements.remove( 0 ) );
 			} else {
 				newChildren.add( element );
@@ -77,7 +77,7 @@ public class CaseSqlElement extends SqlElement {
 
 	}
 
-	private void toString( StringBuilder buffer, SqlElement node, int depth ) {
+	private void toString( StringBuilder buffer, BaseSql node, int depth ) {
 
 		String tab = Strings.lpad( "", depth * 2, ' ' );
 
@@ -93,7 +93,7 @@ public class CaseSqlElement extends SqlElement {
 
 		sb.append( "[CASE]\n" );
 
-		for( SqlElement node : children ) {
+		for( BaseSql node : children ) {
 			toString( sb, node, 0 );
 		}
 
@@ -102,21 +102,21 @@ public class CaseSqlElement extends SqlElement {
 	}
 
 	@Override
-	public String toString( QueryParameter param ) throws QueryParseException {
+	public String toString( QueryParameter param ) throws ParseException {
 		sortElseElementToLast();
 		return super.toString( param );
 	}
 
-	private boolean isElseIfSeries( SqlElement element ) {
+	private boolean isElseIfSeries( BaseSql element ) {
 		Class klass = element.getClass();
-		if( klass == ElseIfSqlElement.class ) return true;
-		return klass == WhenSqlElement.class;
+		if( klass == ElseIfSql.class ) return true;
+		return klass == WhenSql.class;
 
 	}
 
-	private boolean isIfSeries( SqlElement element ) {
+	private boolean isIfSeries( BaseSql element ) {
 		Class klass = element.getClass();
-		return klass == IfSqlElement.class;
+		return klass == IfSql.class;
 	}
 
 }

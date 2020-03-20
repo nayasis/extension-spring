@@ -1,7 +1,7 @@
 package io.nayasis.spring.extension.sql.phase.element.abstracts;
 
 /**
- * @author Administrator
+ * @author nayasis@gmail.com
  * @since 2015-10-23
  */
 public class ElementText {

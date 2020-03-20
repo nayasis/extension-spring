@@ -1,27 +1,27 @@
 package io.nayasis.spring.extension.sql.phase.element;
 
 import io.nayasis.basica.base.Strings;
-import io.nayasis.spring.extension.sql.phase.element.abstracts.SqlElement;
+import io.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ParseException;
 
 import java.util.List;
 
-public class WhenSqlElement extends ElseIfSqlElement {
+public class ElseIfSql extends IfSql {
 
-	public WhenSqlElement( String testExpression ) throws ParseException {
+	public ElseIfSql( String testExpression ) throws ParseException {
 		super( testExpression );
 	}
 
-	public WhenSqlElement( String testExpression, List<SqlElement> children ) {
+	public ElseIfSql( String testExpression, List<BaseSql> children ) {
 		super( testExpression, children );
 	}
 
-	public WhenSqlElement( Expression testExpression, List<SqlElement> children ) {
+	public ElseIfSql( Expression testExpression, List<BaseSql> children ) {
 		super( testExpression, children );
 	}
 
-	private void toString( StringBuilder buffer, SqlElement node, int depth ) {
+	private void toString( StringBuilder buffer, BaseSql node, int depth ) {
 
 		String tab = Strings.lpad( "", depth * 2, ' ' );
 
@@ -30,13 +30,13 @@ public class WhenSqlElement extends ElseIfSqlElement {
 	}
 
 	@Override
-	public String toString() {
+	public String toString() throws ParseException {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append( String.format("[WHEN test='%s']\n", getTestExpression()) );
+		sb.append( String.format("[ElseIF test='%s']\n", getExpression()) );
 
-		for( SqlElement node : children ) {
+		for( BaseSql node : children ) {
 			toString( sb, node, 1 );
 		}
 

@@ -1,12 +1,11 @@
 package io.nayasis.spring.extension.sql.phase.element.abstracts;
 
 import io.nayasis.spring.extension.sql.entity.QueryParameter;
-import io.nayasis.spring.extension.sql.phase.element.ElseIfSqlElement;
-import io.nayasis.spring.extension.sql.phase.element.ElseSqlElement;
-import io.nayasis.spring.extension.sql.phase.element.IfSqlElement;
-import io.nayasis.spring.extension.sql.phase.element.WhenFirstSqlElement;
-import io.nayasis.spring.extension.sql.phase.element.WhenSqlElement;
-import io.nayasis.spring.extension.sql.phase.element.exception.QueryParseException;
+import io.nayasis.spring.extension.sql.phase.element.ElseIfSql;
+import io.nayasis.spring.extension.sql.phase.element.ElseSql;
+import io.nayasis.spring.extension.sql.phase.element.IfSql;
+import io.nayasis.spring.extension.sql.phase.element.WhenFirstSql;
+import io.nayasis.spring.extension.sql.phase.element.WhenSql;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.ParseException;
@@ -15,11 +14,11 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SqlElement {
+public abstract class BaseSql {
 
-    protected List<SqlElement> children = new ArrayList<>();
+    protected List<BaseSql> children = new ArrayList<>();
 
-	public String toString( QueryParameter param ) throws QueryParseException {
+	public String toString( QueryParameter param ) throws ParseException {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -31,11 +30,11 @@ public abstract class SqlElement {
 
 	}
 
-	public void append( SqlElement sqlElement ) {
+	public void append( BaseSql sqlElement ) {
 		children.add( sqlElement );
 	}
 
-	public List<SqlElement> children() {
+	public List<BaseSql> children() {
 		return children;
 	}
 
@@ -45,7 +44,7 @@ public abstract class SqlElement {
 
 		Boolean previousCondition = null;
 
-		for( SqlElement element : children ) {
+		for( BaseSql element : children ) {
 
 			if( isElseSeries(element) ) {
 				if( previousCondition != null && previousCondition != true ) {
@@ -73,31 +72,31 @@ public abstract class SqlElement {
 
 	}
 
-	private boolean isIf( SqlElement element ) {
+	private boolean isIf( BaseSql element ) {
 		Class klass = element.getClass();
-		return klass == IfSqlElement.class || klass == WhenFirstSqlElement.class;
+		return klass == IfSql.class || klass == WhenFirstSql.class;
 	}
 
-	private boolean isElseIf( SqlElement element ) {
+	private boolean isElseIf( BaseSql element ) {
 		Class klass = element.getClass();
-		return klass == ElseIfSqlElement.class || klass == WhenSqlElement.class;
+		return klass == ElseIfSql.class || klass == WhenSql.class;
 	}
 
-	private boolean isElse( SqlElement element ) {
-		Class<? extends SqlElement> klass = element.getClass();
-		return klass == ElseSqlElement.class && klass != WhenFirstSqlElement.class;
+	private boolean isElse( BaseSql element ) {
+		Class<? extends BaseSql> klass = element.getClass();
+		return klass == ElseSql.class && klass != WhenFirstSql.class;
 	}
 
-	private boolean getIfSeriesResult( SqlElement element, Object param ) {
+	private boolean getIfSeriesResult( BaseSql element, Object param ) {
 		if( ! isIf(element) && ! isElseIf(element) ) return false;
-		return ((IfSqlElement) element).isTrue( param );
+		return ((IfSql) element).isTrue( param );
 	}
 
-	private boolean isElseSeries( SqlElement element ) {
+	private boolean isElseSeries( BaseSql element ) {
 		Class klass = element.getClass();
-		if( klass == ElseIfSqlElement.class ) return true;
-		if( klass == WhenSqlElement.class   ) return true;
-		return klass == ElseSqlElement.class;
+		if( klass == ElseIfSql.class ) return true;
+		if( klass == WhenSql.class   ) return true;
+		return klass == ElseSql.class;
 	}
 
 	protected Expression toExpression( String expression ) throws ParseException {
