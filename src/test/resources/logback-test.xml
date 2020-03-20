@@ -13,4 +13,8 @@
     <appender-ref ref="console" />
   </logger>
 
+  <logger name="io.nayasis.spring.extension" level="debug">
+    <appender-ref ref="console" />
+  </logger>
+
 </configuration>
