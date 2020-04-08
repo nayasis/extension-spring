@@ -19,8 +19,7 @@ public class NoErrorMapAccessor extends MapAccessor {
         try {
             return super.read( context, target, name );
         } catch ( Exception e ) {
-            log.error( e.getMessage(), e );
-            return new TypedValue( "" );
+            return new TypedValue( null );
         }
     }
 }

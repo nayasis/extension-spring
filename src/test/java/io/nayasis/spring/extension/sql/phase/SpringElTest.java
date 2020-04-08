@@ -23,8 +23,8 @@ public class SpringElTest {
         Person p = new Person().name( "nayasis" ).age( 40 ).job( "engineer" );
 
 //        isTrue( "name?.isEmpty()", p );
-        isTrue( "key?.isEmpty()", p );
-        isTrue( "address?.isEmpty()", p );
+        isTrue( "${key:}.isEmpty()", p );
+        isTrue( "${address}?.isEmpty()", p );
         isTrue( "address == 0", p );
 
     }
