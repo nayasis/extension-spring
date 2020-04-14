@@ -31,7 +31,7 @@ public class Throwables implements ApplicationContextAware {
         List<StackTraceElement> list = new ArrayList<>();
 
         for( StackTraceElement e : throwable.getStackTrace() ) {
-            if( Validator.isFound( e.toString(), errorFilter) ) continue;
+            if( ! errorFilter.isEmpty() && Validator.isFound( e.toString(), errorFilter) ) continue;
             list.add( e );
         }
         clone.setStackTrace( list.toArray( new StackTraceElement[] {} ) );
