@@ -10,6 +10,8 @@ import java.util.Collection;
 
 public abstract class AbstractSpecification<T> {
 
+    public abstract Specification<T> build();
+
     protected Specification<T> in( String key, Collection values ) {
         return (Specification<T>) ( root, query, cb ) -> {
             if( Validator.isNotEmpty(values) ) {
@@ -24,18 +26,48 @@ public abstract class AbstractSpecification<T> {
         };
     }
 
-    protected Specification<T> like( String key, String value ) {
+    protected Specification<T> like( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
             if( Validator.isEmpty(value) ) return cb.conjunction();
             return cb.like( getPath(root, key), "%" + value + "%" );
         };
     }
 
-    protected Specification<T> notLike( String key, String value ) {
+    protected Specification<T> notLike( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
             if( Validator.isEmpty(value) ) return cb.conjunction();
             return cb.notLike( getPath(root, key), "%" + value + "%" );
         };
+    }
+
+    protected Specification<T> likes( String key, Collection values ) {
+        Specification<T> specification = null;
+        if( Validator.isNotEmpty(values) ) {
+            for( Object value : values ) {
+                if( value == null ) continue;
+                if( specification == null ) {
+                    specification = like( key, value );
+                } else {
+                    specification = specification.or( like( key,value ) );
+                }
+            }
+        }
+        return specification;
+    }
+
+    protected Specification<T> notLikes( String key, Collection values ) {
+        Specification<T> specification = null;
+        if( Validator.isNotEmpty(values) ) {
+            for( Object value : values ) {
+                if( value == null ) continue;
+                if( specification == null ) {
+                    specification = notLike( key, value );
+                } else {
+                    specification = specification.or( notLike( key,value ) );
+                }
+            }
+        }
+        return specification;
     }
 
     protected Specification<T> isNull( String key ) {
