@@ -1,7 +1,6 @@
 package com.github.nayasis.spring.extension.sql.phase;
 
 import com.github.nayasis.basica.reflection.Reflector;
-import com.github.nayasis.spring.extension.sql.expression.NoErrorMapAccessor;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +37,6 @@ public class SpringElTest {
         log.debug( "parameter  : {}", param );
 
         StandardEvaluationContext context = new StandardEvaluationContext( param );
-        context.addPropertyAccessor( new NoErrorMapAccessor() );
 
         boolean success = toExpression( expression ).getValue( context, boolean.class );
 

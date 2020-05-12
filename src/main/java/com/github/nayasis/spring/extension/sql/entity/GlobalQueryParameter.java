@@ -13,7 +13,7 @@ import java.util.Set;
 @Slf4j
 public class GlobalQueryParameter {
 
-	private final String KEY_THREAD_LOCAL = String.format( "$s.SQL_PARAM", GlobalQueryParameter.class.getName() );
+	private final String KEY_THREAD_LOCAL = String.format( "%s.SQL_PARAM", GlobalQueryParameter.class.getName() );
 
 	private Map<String,Object> global = new HashMap<>();
 

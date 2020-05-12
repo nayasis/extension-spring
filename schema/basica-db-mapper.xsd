@@ -45,7 +45,7 @@
   <!-- Define group -->
   <xs:group name="ifElse">
     <xs:sequence>
-      <xs:element ref="nm:if"     minOccurs="1" maxOccurs="1" />
+      <xs:element ref="nm:if"     minOccurs="1" maxOccurs="1"         />
       <xs:element ref="nm:elseif" minOccurs="0" maxOccurs="unbounded" />
       <xs:element ref="nm:else"   minOccurs="0" maxOccurs="1"         />
     </xs:sequence>
@@ -56,11 +56,11 @@
   <xs:element name="key">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group   ref="nm:ifElse"   />
-        <xs:element ref="nm:case"     />
-        <xs:element ref="nm:foreach"  />
-        <xs:element ref="nm:group"    />
-        <xs:element ref="nm:ref"      />
+        <xs:group   ref="nm:ifElse"  />
+        <xs:element ref="nm:case"    />
+        <xs:element ref="nm:foreach" />
+        <xs:element ref="nm:group"   />
+        <xs:element ref="nm:ref"     />
       </xs:choice>
       <xs:attribute name="id" type="nm:notEmpty" use="required"/>
     </xs:complexType>
@@ -69,11 +69,11 @@
   <xs:element name="if">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group   ref="nm:ifElse"   />
-        <xs:element ref="nm:case"     />
-        <xs:element ref="nm:foreach"  />
-        <xs:element ref="nm:group"    />
-        <xs:element ref="nm:ref"      />
+        <xs:group   ref="nm:ifElse"  />
+        <xs:element ref="nm:case"    />
+        <xs:element ref="nm:foreach" />
+        <xs:element ref="nm:group"   />
+        <xs:element ref="nm:ref"     />
       </xs:choice>
       <xs:attribute name="test" type="nm:notEmpty" use="required" />
     </xs:complexType>
@@ -82,11 +82,11 @@
   <xs:element name="elseif">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group   ref="nm:ifElse"   />
-        <xs:element ref="nm:case"     />
-        <xs:element ref="nm:foreach"  />
-        <xs:element ref="nm:group"    />
-        <xs:element ref="nm:ref"      />
+        <xs:group   ref="nm:ifElse"  />
+        <xs:element ref="nm:case"    />
+        <xs:element ref="nm:foreach" />
+        <xs:element ref="nm:group"   />
+        <xs:element ref="nm:ref"     />
       </xs:choice>
       <xs:attribute name="test" type="nm:notEmpty" use="required" />
     </xs:complexType>
@@ -95,11 +95,11 @@
   <xs:element name="else">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group   ref="nm:ifElse"   />
-        <xs:element ref="nm:case"     />
-        <xs:element ref="nm:foreach"  />
-        <xs:element ref="nm:group"    />
-        <xs:element ref="nm:ref"      />
+        <xs:group   ref="nm:ifElse"  />
+        <xs:element ref="nm:case"    />
+        <xs:element ref="nm:foreach" />
+        <xs:element ref="nm:group"   />
+        <xs:element ref="nm:ref"     />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -116,11 +116,11 @@
   <xs:element name="when">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group   ref="nm:ifElse"   />
-        <xs:element ref="nm:case"     />
-        <xs:element ref="nm:foreach"  />
-        <xs:element ref="nm:group"    />
-        <xs:element ref="nm:ref"      />
+        <xs:group   ref="nm:ifElse"  />
+        <xs:element ref="nm:case"    />
+        <xs:element ref="nm:foreach" />
+        <xs:element ref="nm:group"   />
+        <xs:element ref="nm:ref"     />
       </xs:choice>
       <xs:attribute name="test" type="nm:notEmpty" use="required" />
     </xs:complexType>
@@ -135,11 +135,11 @@
         <xs:element ref="nm:group"    />
         <xs:element ref="nm:ref"      />
       </xs:choice>
-      <xs:attribute name="key"       type="nm:notEmpty" use="required" />
-      <xs:attribute name="open"      type="nm:notEmpty" />
-      <xs:attribute name="close"     type="nm:notEmpty" />
-      <xs:attribute name="concater"  type="nm:notEmpty" />
-      <xs:attribute name="index"     type="nm:notEmpty" />
+      <xs:attribute name="key"    type="nm:notEmpty" use="required" />
+      <xs:attribute name="open"   type="nm:notEmpty" />
+      <xs:attribute name="close"  type="nm:notEmpty" />
+      <xs:attribute name="concat" type="nm:notEmpty" />
+      <xs:attribute name="index"  type="nm:notEmpty" />
     </xs:complexType>
   </xs:element>
 
@@ -148,9 +148,9 @@
       <xs:sequence>
         <xs:element ref="nm:if" minOccurs="1" maxOccurs="unbounded" />
       </xs:sequence>
-      <xs:attribute name="open"      type="nm:notEmpty" />
-      <xs:attribute name="close"     type="nm:notEmpty" />
-      <xs:attribute name="concater" type="nm:notEmpty" />
+      <xs:attribute name="open"   type="nm:notEmpty" />
+      <xs:attribute name="close"  type="nm:notEmpty" />
+      <xs:attribute name="concat" type="nm:notEmpty" />
     </xs:complexType>
   </xs:element>
 

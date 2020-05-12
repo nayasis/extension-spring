@@ -3,17 +3,16 @@ package com.github.nayasis.spring.extension.sql.phase.element;
 import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.spring.extension.sql.entity.QueryParameter;
 import com.github.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
-import org.springframework.expression.EvaluationContext;
+import org.mvel2.MVEL;
 import org.springframework.expression.EvaluationException;
-import org.springframework.expression.Expression;
 import org.springframework.expression.ParseException;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class IfSql extends BaseSql {
 
-	private Expression expression;
+	private Serializable expression;
 
 	public IfSql( String expression ) throws ParseException {
 		this.expression = toExpression( expression );
@@ -24,7 +23,7 @@ public class IfSql extends BaseSql {
 		this.children = children;
 	}
 
-    public IfSql( Expression expression, List<BaseSql> children ) {
+    public IfSql( Serializable expression, List<BaseSql> children ) {
 	    this.expression = expression;
         this.children = children;
     }
@@ -47,7 +46,7 @@ public class IfSql extends BaseSql {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append( String.format("[IF test='%s']\n", expression ) );
+		sb.append( String.format("[IF test='%s']\n", toStringFromExpression(expression) ) );
 
 		for( BaseSql node : children ) {
 			toString( sb, node, 1 );
@@ -58,12 +57,11 @@ public class IfSql extends BaseSql {
 	}
 
     public boolean isTrue( Object param ) throws EvaluationException {
-        EvaluationContext context = new StandardEvaluationContext(param);
-        return expression.getValue( context, Boolean.class );
+		return (boolean) MVEL.executeExpression( expression, param );
 	}
 
 	protected String getExpression() {
-		return expression.getExpressionString();
+		return expression.toString();
 	}
 
 	protected WhenFirstSql toWhenFirstSqlElement() {

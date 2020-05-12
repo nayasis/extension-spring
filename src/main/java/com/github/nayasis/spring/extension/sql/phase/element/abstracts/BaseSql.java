@@ -1,21 +1,25 @@
 package com.github.nayasis.spring.extension.sql.phase.element.abstracts;
 
+import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.spring.extension.sql.entity.QueryParameter;
 import com.github.nayasis.spring.extension.sql.phase.element.ElseIfSql;
 import com.github.nayasis.spring.extension.sql.phase.element.ElseSql;
 import com.github.nayasis.spring.extension.sql.phase.element.IfSql;
+import com.github.nayasis.spring.extension.sql.phase.element.RootSql;
 import com.github.nayasis.spring.extension.sql.phase.element.WhenFirstSql;
 import com.github.nayasis.spring.extension.sql.phase.element.WhenSql;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
+import org.mvel2.CompileException;
+import org.mvel2.MVEL;
+import org.mvel2.compiler.CompiledExpression;
 import org.springframework.expression.ParseException;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseSql {
 
+	protected BaseSql       parent   = null;
     protected List<BaseSql> children = new ArrayList<>();
 
 	public String toString( QueryParameter param ) throws ParseException {
@@ -30,8 +34,26 @@ public abstract class BaseSql {
 
 	}
 
-	public void append( BaseSql sqlElement ) {
-		children.add( sqlElement );
+	protected String getTab( int depth ) {
+		return Strings.lpad( "", depth * 2, ' ' );
+	}
+
+	public void append( BaseSql sql ) {
+		children.add( sql );
+		sql.parent = this;
+	}
+
+	public RootSql getRoot() {
+		BaseSql curr = this;
+		while( curr.parent != null ) {
+			curr = curr.parent;
+		}
+		try {
+			return (RootSql) curr;
+		} catch ( Exception e ) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	public List<BaseSql> children() {
@@ -99,9 +121,19 @@ public abstract class BaseSql {
 		return klass == ElseSql.class;
 	}
 
-	protected Expression toExpression( String expression ) throws ParseException {
-		ExpressionParser parser = new SpelExpressionParser();
-		return parser.parseExpression( expression );
+	protected Serializable toExpression( String expression ) throws CompileException {
+		return MVEL.compileExpression( expression );
 	}
 
+	protected String toStringFromExpression( Serializable expression ) {
+		if( expression instanceof CompiledExpression ) {
+			try {
+				return new String( ((CompiledExpression) expression).getFirstNode().getExpr() );
+			} catch ( Exception e ) {
+				return ((CompiledExpression) expression).toString();
+			}
+		} else {
+			return expression.toString();
+		}
+	}
 }

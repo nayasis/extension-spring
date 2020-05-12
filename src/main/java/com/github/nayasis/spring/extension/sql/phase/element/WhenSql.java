@@ -1,10 +1,9 @@
 package com.github.nayasis.spring.extension.sql.phase.element;
 
-import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
-import org.springframework.expression.Expression;
 import org.springframework.expression.ParseException;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class WhenSql extends ElseIfSql {
@@ -17,16 +16,12 @@ public class WhenSql extends ElseIfSql {
 		super( testExpression, children );
 	}
 
-	public WhenSql( Expression testExpression, List<BaseSql> children ) {
+	public WhenSql( Serializable testExpression, List<BaseSql> children ) {
 		super( testExpression, children );
 	}
 
 	private void toString( StringBuilder buffer, BaseSql node, int depth ) {
-
-		String tab = Strings.lpad( "", depth * 2, ' ' );
-
-		buffer.append( String.format( "%s%s", tab, node.toString() ) );
-
+		buffer.append( String.format( "%s%s", getTab(depth), node.toString() ) );
 	}
 
 	@Override

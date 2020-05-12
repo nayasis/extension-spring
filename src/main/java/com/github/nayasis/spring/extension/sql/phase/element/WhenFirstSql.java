@@ -2,8 +2,8 @@ package com.github.nayasis.spring.extension.sql.phase.element;
 
 import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
-import org.springframework.expression.Expression;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class WhenFirstSql extends IfSql {
@@ -12,7 +12,7 @@ public class WhenFirstSql extends IfSql {
 		super( testExpression, children );
 	}
 
-	public WhenFirstSql( Expression testExpression, List<BaseSql> children ) {
+	public WhenFirstSql( Serializable testExpression, List<BaseSql> children ) {
 		super( testExpression, children );
 	}
 

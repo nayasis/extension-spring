@@ -18,7 +18,7 @@ public class StringSql extends BaseSql {
     }
 
 	@Override
-    public void append( BaseSql sqlElement ) {}
+    public void append( BaseSql sql ) {}
 
 	public String toString() {
 		return text;
