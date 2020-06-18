@@ -24,7 +24,7 @@ public class SimpleKey {
      * Create a new {@link org.springframework.cache.interceptor.SimpleKey} instance.
      * @param elements the elements of the key
      */
-    public SimpleKey(Object... elements) {
+    public SimpleKey( Object... elements ) {
         Assert.notNull(elements, "Elements must not be null");
         this.params = elements.clone();
         // Pre-calculate hashCode field
