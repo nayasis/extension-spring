@@ -17,6 +17,8 @@ import java.util.Map;
 /**
  * Error handler
  *
+ * (it used only reference. ErrorAttributes must be declared in main project.)
+ *
  * @author nayasis@gmail.com
  * @since  2016-03-04
  */
@@ -37,23 +39,24 @@ public class ErrorHandler {
             @Override
             public Map<String,Object> getErrorAttributes( WebRequest request, boolean includeStackTrace ) {
 
-                Map<String,Object> attributes = super.getErrorAttributes( request, includeStackTrace );
-                Throwable error = getError( request );
+                Map<String,Object> attributes = getErrorAttributes( request, includeStackTrace );
+                Throwable          error      = getError( request );
 
                 if( error != null ) {
 
                     throwHandler.logError( error );
 
-                    if( includeException  ) attributes.put( "exception",   error.getClass().getName()   );
-                    if( includeStackTrace ) attributes.put( "errorDetail", throwHandler.toString(error) );
+                    if( includeException  ) attributes.put( "exception", error.getClass().getName()   );
+                    if( includeStackTrace ) attributes.put( "trace",     throwHandler.toString(error) );
 
                     if( error instanceof DomainException ) {
-                        attributes.put( "message", Strings.nvl( error.getMessage() ) );
-                        attributes.put( "errorCd", ( (DomainException) error ).errorCode() );
-                    } else {
-                        attributes.put( "message", error.getMessage() );
-                        attributes.put( "errorCd", Strings.nvl(attributes.get("status")) );
+                        DomainException exception = (DomainException) error;
+                        if( Strings.isNotEmpty( exception.errorCode() ) ) {
+                            attributes.put( "code", exception.errorCode() );
+                        }
                     }
+
+                    attributes.put( "message", error.getMessage() );
 
                 }
 
