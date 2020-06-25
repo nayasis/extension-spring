@@ -202,13 +202,13 @@ public class HttpContext implements ApplicationContextAware {
     }
 
     /**
-     * compare active profile value
+     * check if specific profile is active.
      *
-     * @param profile   comparable profile value.
-     * @return true if current profile is equals with comparable profile (case-insensitive)
+     * @param profile   comparable profile.
+     * @return true if given profile is active
      */
-    public static boolean isActiveProfile( String profile ) {
-        return activeProfile().equalsIgnoreCase( profile );
+    public static boolean hasProfile( String profile ) {
+        return activeProfile().contains( profile );
     }
 
     /**
