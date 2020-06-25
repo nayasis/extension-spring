@@ -1,7 +1,9 @@
 package com.github.nayasis.spring.extension.web.http.request;
 
+import com.github.nayasis.basica.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.springframework.http.MediaType;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -36,6 +38,10 @@ public class CachedServletRequest extends HttpServletRequestWrapper {
     @Override
     public ServletInputStream getInputStream() throws IOException {
         if( cachedBody == null ) {
+            // do read parameter map if request is form type parameter.
+            if( getContentType().contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE) ) {
+                super.getParameterNames();
+            }
             cachedBody = IOUtils.toByteArray( super.getInputStream() );
         }
         return new InputStreamWrapper( cachedBody );
@@ -44,6 +50,15 @@ public class CachedServletRequest extends HttpServletRequestWrapper {
     @Override
     public BufferedReader getReader() throws IOException{
         return new BufferedReader( new InputStreamReader(getInputStream()) );
+    }
+
+    public boolean isContentType( String... type ) {
+        String contentType = Strings.toLowerCase(getContentType());
+        if( contentType.isEmpty() ) return false;
+        for( String t : type ) {
+            if( contentType.contains(t) ) return true;
+        }
+        return false;
     }
 
     /**
