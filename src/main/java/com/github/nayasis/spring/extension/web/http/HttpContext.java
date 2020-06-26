@@ -10,6 +10,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -63,6 +64,18 @@ public class HttpContext implements ApplicationContextAware {
     public static HttpServletResponse response() {
         ServletRequestAttributes attributes = servletAttributes();
         return attributes == null ? mockResponse : attributes.getResponse();
+    }
+
+    public static boolean hasContentType( MediaType... type ) {
+        String contentType = getContentType();
+        for( MediaType t : type ) {
+            if( contentType.contains(t.getType()) ) return true;
+        }
+        return false;
+    }
+
+    public static String getContentType() {
+        return Strings.toLowerCase( request().getContentType() );
     }
 
     public static String contextRoot() {
