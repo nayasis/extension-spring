@@ -13,6 +13,9 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * Http request wrapper caching contents to read inputstream multiple.
@@ -23,7 +26,8 @@ import java.io.InputStreamReader;
 @Slf4j
 public class CachedServletRequest extends HttpServletRequestWrapper {
 
-    private byte[] cachedBody = null;
+    private byte[]               body;
+    private Map<String,String[]> params;
 
     /**
      * Constructs wrapping the given request.
@@ -32,19 +36,53 @@ public class CachedServletRequest extends HttpServletRequestWrapper {
      * @throws IllegalArgumentException if the request is null
      */
     public CachedServletRequest( HttpServletRequest request ) {
+
         super( request );
+
+        params = Collections.unmodifiableMap( request.getParameterMap() );
+
+        try {
+            body = IOUtils.toByteArray( request.getInputStream() );
+        } catch ( IOException e ) {
+            log.error( e.getMessage(), e );
+        }
+
     }
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        if( cachedBody == null ) {
-            // do read parameter map if request is form type parameter.
-            if( getContentType().contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE) ) {
-                super.getParameterNames();
-            }
-            cachedBody = IOUtils.toByteArray( super.getInputStream() );
+        return new InputStreamWrapper( body );
+    }
+
+    @Override
+    public String getParameter( String name ) {
+        String[] values = getParameterValues( name );
+        if( values == null || values.length == 0 ) {
+            return null;
+        } else {
+            return values[0];
         }
-        return new InputStreamWrapper( cachedBody );
+    }
+
+    @Override
+    public Map<String,String[]> getParameterMap() {
+        return params;
+    }
+
+    @Override
+    public Enumeration<String> getParameterNames() {
+        return Collections.enumeration(params.keySet());
+    }
+
+    @Override
+    public String[] getParameterValues( String name ) {
+        String[] trg = null;
+        String[] src = params.get( name );
+        if ( src != null ) {
+            trg = new String[ src.length ];
+            System.arraycopy( src, 0, trg, 0, src.length );
+        }
+        return trg;
     }
 
     @Override
@@ -52,11 +90,11 @@ public class CachedServletRequest extends HttpServletRequestWrapper {
         return new BufferedReader( new InputStreamReader(getInputStream()) );
     }
 
-    public boolean isContentType( String... type ) {
+    public boolean hasContentType( MediaType... type ) {
         String contentType = Strings.toLowerCase(getContentType());
         if( contentType.isEmpty() ) return false;
-        for( String t : type ) {
-            if( contentType.contains(t) ) return true;
+        for( MediaType t : type ) {
+            if( contentType.contains(t.getType()) ) return true;
         }
         return false;
     }
