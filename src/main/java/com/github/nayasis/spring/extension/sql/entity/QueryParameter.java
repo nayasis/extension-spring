@@ -1,8 +1,10 @@
 package com.github.nayasis.spring.extension.sql.entity;
 
 import com.github.nayasis.basica.base.Types;
+import com.github.nayasis.basica.expression.Expression;
 import com.github.nayasis.basica.model.NMap;
 import com.github.nayasis.basica.reflection.Reflector;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +18,8 @@ import static com.github.nayasis.spring.extension.sql.common.QueryConstant.PARAM
  * @author 1002159
  * @since 2016-01-07
  */
+@NoArgsConstructor
 public class QueryParameter extends NMap<String,Object> {
-
-    public QueryParameter() {}
 
     public QueryParameter( Object value ) {
         init( value );
@@ -78,6 +79,14 @@ public class QueryParameter extends NMap<String,Object> {
         List<Integer> indices = getForeachIndex();
         indices.add( index );
         return indices.size() - 1;
+    }
+
+    public boolean containsByPath( String path ) {
+        return containsKey( Expression.of(path) );
+    }
+
+    public Object getByPath( String path ) {
+        return get( Expression.of( path ) );
     }
 
 }
