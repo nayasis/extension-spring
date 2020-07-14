@@ -21,12 +21,6 @@ public class SqlNode {
 
         sql = new RootSql( id );
 
-
-
-
-
     }
-
-
 
 }

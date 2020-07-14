@@ -23,11 +23,11 @@ public class ForEachSql extends BaseSql {
 	private String index;
 
 	public ForEachSql( String key, String open, String close, String concater, String index ) {
-		this.key         = Strings.trim( key );
-		this.open        = Strings.trim( open );
-		this.close       = Strings.trim( close );
-		this.concater    = Strings.trim( concater );
-		this.index       = Strings.trim( index );
+		this.key      = Strings.trim( key );
+		this.open     = Strings.trim( open );
+		this.close    = Strings.trim( close );
+		this.concater = Strings.trim( concater );
+		this.index    = Strings.trim( index );
 	}
 
 	@Override
