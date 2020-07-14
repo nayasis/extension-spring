@@ -18,7 +18,7 @@ public class MvelTest {
     @Test
     public void test() {
 
-        Person p = testData();
+        Person p = param();
 
         Map context = new NMap( p );
 
@@ -33,21 +33,61 @@ public class MvelTest {
 
     }
 
-    private Person testData() {
-        return new Person().name( "nayasis" ).age( 40 ).job( "engineer" );
-    }
-
     @Test
-    public void test2() {
+    public void simple() {
 
         String expression = " name == 'nayasis' && age == 40 && address == empty";
 
         Serializable compiled = MVEL.compileExpression( expression );
 
-        Object o = MVEL.executeExpression( compiled, testData() );
+        Object o = MVEL.executeExpression( compiled, param() );
 
         log.debug( "result : {}", o );
 
+    }
+
+    @Test
+    public void contains() {
+
+        String expression = " ['nayasis','jake'].contains(name) ";
+
+        Serializable compiled = MVEL.compileExpression( expression );
+
+        Object o = MVEL.executeExpression( compiled, param() );
+
+        log.debug( "result : {}", o );
+
+    }
+
+    @Test
+    public void nvl() {
+
+        String expression = " ['nayasis','jake'].contains(name) ";
+
+        Serializable compiled = MVEL.compileExpression( expression );
+
+        Object o = MVEL.executeExpression( compiled, param() );
+
+        log.debug( "result : {}", o );
+
+    }
+
+    @Test
+    public void like() {
+
+        String expression = " address || 'jake' ";
+
+        Serializable compiled = MVEL.compileExpression( expression );
+
+        Object o = MVEL.executeExpression( compiled, param() );
+
+        log.debug( "result : {}", o );
+
+    }
+
+
+    private Person param() {
+        return new Person().name( "nayasis" ).age( 40 ).job( "engineer" );
     }
 
     @Data
