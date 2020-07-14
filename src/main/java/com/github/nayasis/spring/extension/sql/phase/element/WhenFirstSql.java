@@ -1,19 +1,19 @@
 package com.github.nayasis.spring.extension.sql.phase.element;
 
 import com.github.nayasis.basica.base.Strings;
+import com.github.nayasis.basica.expression.Expression;
 import com.github.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class WhenFirstSql extends IfSql {
 
-	public WhenFirstSql( String testExpression, List<BaseSql> children ) {
-		super( testExpression, children );
+	public WhenFirstSql( String expression, List<BaseSql> children ) {
+		super( expression, children );
 	}
 
-	public WhenFirstSql( Serializable testExpression, List<BaseSql> children ) {
-		super( testExpression, children );
+	public WhenFirstSql( Expression expression, List<BaseSql> children ) {
+		super( expression, children );
 	}
 
 	private void toString( StringBuilder buffer, BaseSql node, int depth ) {
@@ -29,7 +29,7 @@ public class WhenFirstSql extends IfSql {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append( String.format("[WHEN test='%s']\n", getExpression()) );
+		sb.append( String.format("[WHEN test='%s']\n", expression) );
 
 		for( BaseSql node : children ) {
 			toString( sb, node, 1 );

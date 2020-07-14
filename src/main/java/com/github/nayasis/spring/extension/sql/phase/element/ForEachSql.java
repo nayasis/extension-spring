@@ -79,7 +79,7 @@ public class ForEachSql extends BaseSql {
 	}
 
 	private String getKey( QueryParameter parameter ) {
-		if( ! parameter.containsJsonPath(key) ) {
+		if( ! parameter.containsByPath(key) ) {
 			if ( parameter.hasSingleParameter() ) {
 				return QueryConstant.PARAMETER_SINGLE;
 			}
@@ -137,7 +137,7 @@ public class ForEachSql extends BaseSql {
 
 	private List getValues( QueryParameter parameter, String key ) {
 
-		Object value = parameter.getByJsonPath( key );
+		Object value = parameter.getByPath( key );
 		if( value == null ) return new ArrayList();
 
 		if( Types.isArrayOrCollection(value) ) {

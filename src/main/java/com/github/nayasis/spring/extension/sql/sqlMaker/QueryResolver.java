@@ -1,5 +1,6 @@
 package com.github.nayasis.spring.extension.sql.sqlMaker;
 
+import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.basica.base.format.Formatter;
 import com.github.nayasis.spring.extension.sql.entity.QueryParameter;
 import lombok.experimental.UtilityClass;
@@ -14,13 +15,13 @@ public class QueryResolver {
     public String bindDynamicQuery( String query, QueryParameter parameter ) {
         return new Formatter().bindParam( PATTERN_DOLLAR, query, parameter, ( key, format, param ) -> {
             if( ! param.containsKey(key) ) return String.format( "${%s}", key );
-            return param.getByJsonPath( key );
+            return Strings.nvl(param.getByPath(key));
         }, false );
     }
 
     public String bindSingleParameterKey( String query, QueryParameter parameter ) {
         return new Formatter().bindParam( PATTERN_SHARP, query, parameter, (key,format,param) -> {
-            if( ! param.containsJsonPath(key) ) return String.format( "#{%s}", PARAMETER_SINGLE );
+            if( ! param.containsByPath(key) ) return String.format( "#{%s}", PARAMETER_SINGLE );
             return String.format( "#{%s}", key );
         }, false );
     }

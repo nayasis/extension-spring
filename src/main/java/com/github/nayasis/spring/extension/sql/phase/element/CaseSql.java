@@ -49,11 +49,11 @@ public class CaseSql extends BaseSql {
 
 			if( i == 0 ) {
 				if( isElseIfSeries( ifSqlElement ) ) {
-					caseElements.set( i,  ifSqlElement.toWhenFirstSqlElement() );
+					caseElements.set( i,  ifSqlElement.toWhenFirstSql() );
 				}
 			} else {
 				if( isIfSeries( ifSqlElement ) ) {
-					caseElements.set( i,  ifSqlElement.toWhenSqlElement() );
+					caseElements.set( i,  ifSqlElement.toWhenSql() );
 				}
 			}
 
