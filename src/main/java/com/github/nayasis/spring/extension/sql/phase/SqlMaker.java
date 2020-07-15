@@ -20,9 +20,10 @@ import org.mvel2.CompileException;
 @Slf4j
 public class SqlMaker {
 
-    public RootSql make( String id, Node xml ) {
-        RootSql sql = new RootSql( id );
-        make( id, sql, xml );
+    public RootSql make( String baseId, String id, Node xml ) {
+        RootSql sql = new RootSql( String.format("%s.%s",baseId,id) );
+        make( sql.id(), sql, xml );
+        sql.resolveMainId( baseId );
         return sql;
     }
 

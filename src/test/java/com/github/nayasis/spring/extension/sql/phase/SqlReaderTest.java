@@ -27,7 +27,7 @@ public class SqlReaderTest {
             if( Strings.isEmpty(id) )
                 throw new InvalidArgumentException( "id is missing" );
 
-            RootSql sql = new SqlMaker().make( id, node );
+            RootSql sql = new SqlMaker().make( "Test", id, node );
 
             log.debug( ">> {}\n{}", id, sql );
 
