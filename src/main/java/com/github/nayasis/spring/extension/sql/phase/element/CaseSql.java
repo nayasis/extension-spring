@@ -78,11 +78,8 @@ public class CaseSql extends BaseSql {
 	}
 
 	private void toString( StringBuilder buffer, BaseSql node, int depth ) {
-
-		String tab = Strings.lpad( "", depth * 2, ' ' );
-
+		String tab = Strings.line( ' ', depth*2 );
 		buffer.append( String.format( "%s%s", tab, node.toString() ) );
-
 	}
 
 	public String toString() {
@@ -90,13 +87,10 @@ public class CaseSql extends BaseSql {
 		sortElseElementToLast();
 
 		StringBuilder sb = new StringBuilder();
-
 		sb.append( "[CASE]\n" );
-
 		for( BaseSql node : children ) {
 			toString( sb, node, 0 );
 		}
-
 		return sb.toString();
 
 	}

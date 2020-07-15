@@ -140,7 +140,9 @@ public class ForEachSql extends BaseSql {
 		Object value = parameter.getByPath( key );
 		if( value == null ) return new ArrayList();
 
-		if( Types.isArrayOrCollection(value) ) {
+		if( value instanceof List ) {
+			return (List) value;
+		} else if( Types.isArrayOrCollection(value) ) {
 			return Types.toList( value );
 		} else {
 			return Arrays.asList( value );

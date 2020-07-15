@@ -1,7 +1,6 @@
 package com.github.nayasis.spring.extension.sql.entity;
 
 import com.github.nayasis.basica.base.Types;
-import com.github.nayasis.basica.expression.Expression;
 import com.github.nayasis.basica.model.NMap;
 import com.github.nayasis.basica.reflection.Reflector;
 import lombok.NoArgsConstructor;
@@ -64,7 +63,7 @@ public class QueryParameter extends NMap<String,Object> {
     }
 
     public List<Integer> getForeachIndex() {
-        if( ! containsKey( FOR_EACH_INDEX ) ) {
+        if( ! containsKey(FOR_EACH_INDEX) ) {
             put( FOR_EACH_INDEX, new ArrayList<Integer>() );
         }
         return (List<Integer>) get( FOR_EACH_INDEX );
@@ -79,14 +78,6 @@ public class QueryParameter extends NMap<String,Object> {
         List<Integer> indices = getForeachIndex();
         indices.add( index );
         return indices.size() - 1;
-    }
-
-    public boolean containsByPath( String path ) {
-        return containsKey( Expression.of(path) );
-    }
-
-    public Object getByPath( String path ) {
-        return get( Expression.of( path ) );
     }
 
 }

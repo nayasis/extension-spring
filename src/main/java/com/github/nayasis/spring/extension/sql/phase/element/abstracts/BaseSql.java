@@ -8,12 +8,8 @@ import com.github.nayasis.spring.extension.sql.phase.element.IfSql;
 import com.github.nayasis.spring.extension.sql.phase.element.RootSql;
 import com.github.nayasis.spring.extension.sql.phase.element.WhenFirstSql;
 import com.github.nayasis.spring.extension.sql.phase.element.WhenSql;
-import org.mvel2.CompileException;
-import org.mvel2.MVEL;
-import org.mvel2.compiler.CompiledExpression;
 import org.springframework.expression.ParseException;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +28,14 @@ public abstract class BaseSql {
 
 		return sb.toString();
 
+	}
+
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for( BaseSql child : children ) {
+			sb.append( child.toString() );
+		}
+		return sb.toString();
 	}
 
 	protected String getTab( int depth ) {
@@ -105,7 +109,7 @@ public abstract class BaseSql {
 	}
 
 	private boolean isElse( BaseSql element ) {
-		Class<? extends BaseSql> klass = element.getClass();
+		Class klass = element.getClass();
 		return klass == ElseSql.class && klass != WhenFirstSql.class;
 	}
 
@@ -121,19 +125,4 @@ public abstract class BaseSql {
 		return klass == ElseSql.class;
 	}
 
-	protected Serializable toExpression( String expression ) throws CompileException {
-		return MVEL.compileExpression( expression );
-	}
-
-	protected String toStringFromExpression( Serializable expression ) {
-		if( expression instanceof CompiledExpression ) {
-			try {
-				return new String( ((CompiledExpression) expression).getFirstNode().getExpr() );
-			} catch ( Exception e ) {
-				return ((CompiledExpression) expression).toString();
-			}
-		} else {
-			return expression.toString();
-		}
-	}
 }

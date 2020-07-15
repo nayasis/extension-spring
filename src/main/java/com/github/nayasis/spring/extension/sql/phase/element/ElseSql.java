@@ -10,26 +10,18 @@ import com.github.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
 public class ElseSql extends BaseSql {
 
     private void toString( StringBuilder buffer, BaseSql node, int depth ) {
-
-        String tab = Strings.lpad( "", depth * 2, ' ' );
-
+        String tab = Strings.line( ' ', depth*2 );
         buffer.append( String.format( "%s%s", tab, node.toString() ) );
-
     }
 
     @Override
     public String toString() {
-
         StringBuilder sb = new StringBuilder();
-
         sb.append( "[ELSE]\n" );
-
         for( BaseSql node : children ) {
             toString( sb, node, 1 );
         }
-
         return sb.toString();
-
     }
 
 }

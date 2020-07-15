@@ -65,25 +65,17 @@ public class GroupSql extends BaseSql {
 	}
 
 	private void toString( StringBuilder buffer, BaseSql node, int depth ) {
-
-		String tab = Strings.lpad( "", depth * 2, ' ' );
-
+		String tab = Strings.line( ' ', depth*2 );
 		buffer.append( String.format( "%s%s", tab, node.toString() ) );
-
 	}
 
 	public String toString() {
-
 		StringBuilder sb = new StringBuilder();
-
 		sb.append( String.format("[GROUP open='%s' close='%s' concater='%s']\n", open, close, concater ) );
-
 		for( BaseSql node : children ) {
 			toString( sb, node, 0 );
 		}
-
 		return sb.toString();
-
 	}
 
 }

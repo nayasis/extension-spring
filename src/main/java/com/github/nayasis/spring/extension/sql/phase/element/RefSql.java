@@ -1,34 +1,32 @@
 package com.github.nayasis.spring.extension.sql.phase.element;
 
-import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.spring.extension.sql.entity.QueryParameter;
 import com.github.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
 
 public class RefSql extends BaseSql {
 
-	private String referenceSqlId = null;
+	private String refId;
 
-	public RefSql( String referenceSqlId ) {
-		if( Strings.isEmpty( referenceSqlId ) ) return;
-		this.referenceSqlId = referenceSqlId;
+	public RefSql( String refId ) {
+		this.refId = refId;
 	}
 
 	/**
 	 * MainId가 세팅되지 않은 참조ID는
 	 * Root Sql MainId 가 세팅될 경우, 이에 맞도록 참조ID를 변경시킨다.
 	 *
-	 * @param mainId main id of sql id.
+	 * @param mainId main id
 	 */
-	public void includeMainId( String mainId ) {
-		if( referenceSqlId != null && ! referenceSqlId.contains( "." ) ) {
-			referenceSqlId = String.format( "%s.%s", mainId, referenceSqlId );
+	public void resolveMainId( String mainId ) {
+		if( refId.contains( "." ) ) {
+			refId = String.format( "%s.%s", mainId, refId );
 		}
 	}
 
 	@Override
     public String toString( QueryParameter param ) {
 
-		if( referenceSqlId == null ) return "";
+		if( refId == null ) return "";
 
 		return "";
 
@@ -44,7 +42,7 @@ public class RefSql extends BaseSql {
 	}
 
 	public String toString() {
-		return referenceSqlId == null ? "" : String.format( "<ref id=\"%s\"/>", referenceSqlId );
+		return refId == null ? "" : String.format( "<ref id=\"%s\"/>", refId );
 	}
 
 }

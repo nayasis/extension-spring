@@ -15,7 +15,7 @@ public class QueryResolver {
     public String bindDynamicQuery( String query, QueryParameter parameter ) {
         return new Formatter().bindParam( PATTERN_DOLLAR, query, parameter, ( key, format, param ) -> {
             if( ! param.containsKey(key) ) return String.format( "${%s}", key );
-            return Strings.nvl(param.getByPath(key));
+            return Strings.nvl( param.getByPath(key) );
         }, false );
     }
 

@@ -13,8 +13,8 @@ public class IfSql extends BaseSql {
 
 	protected Expression expression;
 
-	public IfSql( String expression ) throws ParseException {
-		this.expression = new Expression( expression );
+	public IfSql( String expression ) {
+		this.expression = Expression.of( expression, true );
 	}
 
 	public IfSql( String expression, List<BaseSql> children ) throws ParseException {
@@ -24,7 +24,7 @@ public class IfSql extends BaseSql {
 
     public IfSql( Expression expression, List<BaseSql> children ) {
 	    this.expression = expression;
-        this.children = children;
+        this.children   = children;
     }
 
 	@Override
@@ -33,24 +33,17 @@ public class IfSql extends BaseSql {
 	}
 
 	private void toString( StringBuilder buffer, BaseSql node, int depth ) {
-
-		String tab = Strings.lpad( "", depth * 2, ' ' );
-
+		String tab = Strings.line( ' ', depth*2 );
 		buffer.append( String.format( "%s%s", tab, node.toString() ) );
-
 	}
 
 	@Override
 	public String toString() {
-
 		StringBuilder sb = new StringBuilder();
-
 		sb.append( String.format("[IF test='%s']\n", expression) );
-
 		for( BaseSql node : children ) {
 			toString( sb, node, 1 );
 		}
-
 		return sb.toString();
 
 	}
