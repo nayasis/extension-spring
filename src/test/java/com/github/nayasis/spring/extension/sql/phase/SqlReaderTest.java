@@ -6,7 +6,7 @@ import com.github.nayasis.basica.exception.unchecked.InvalidArgumentException;
 import com.github.nayasis.basica.xml.Xml;
 import com.github.nayasis.basica.xml.XmlDeformed;
 import com.github.nayasis.basica.xml.node.Node;
-import com.github.nayasis.spring.extension.sql.phase.element.RootSql;
+import com.github.nayasis.spring.extension.sql.phase.node.RootSql;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -27,12 +27,11 @@ public class SqlReaderTest {
             if( Strings.isEmpty(id) )
                 throw new InvalidArgumentException( "id is missing" );
 
-            RootSql sql = new SqlReader().makeSql( id, node );
+            RootSql sql = new SqlMaker().make( id, node );
 
             log.debug( ">> {}\n{}", id, sql );
 
         }
-
 
     }
 

@@ -1,9 +1,9 @@
-package com.github.nayasis.spring.extension.sql.phase.element;
+package com.github.nayasis.spring.extension.sql.phase.node;
 
 import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.spring.extension.sql.entity.QueryParameter;
-import com.github.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
-import com.github.nayasis.spring.extension.sql.phase.element.abstracts.ElementText;
+import com.github.nayasis.spring.extension.sql.phase.node.abstracts.BaseSql;
+import com.github.nayasis.spring.extension.sql.phase.node.abstracts.ElementText;
 import org.springframework.expression.ParseException;
 
 import java.util.ArrayList;

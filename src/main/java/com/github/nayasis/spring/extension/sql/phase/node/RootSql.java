@@ -1,6 +1,6 @@
-package com.github.nayasis.spring.extension.sql.phase.element;
+package com.github.nayasis.spring.extension.sql.phase.node;
 
-import com.github.nayasis.spring.extension.sql.phase.element.abstracts.BaseSql;
+import com.github.nayasis.spring.extension.sql.phase.node.abstracts.BaseSql;
 import lombok.Getter;
 import org.springframework.expression.ParseException;
 

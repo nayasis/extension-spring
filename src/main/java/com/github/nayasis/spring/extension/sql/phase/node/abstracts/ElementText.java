@@ -1,4 +1,4 @@
-package com.github.nayasis.spring.extension.sql.phase.element.abstracts;
+package com.github.nayasis.spring.extension.sql.phase.node.abstracts;
 
 /**
  * @author nayasis@gmail.com
