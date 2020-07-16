@@ -14,8 +14,6 @@ import java.util.List;
 
 public class ForEachSql extends BaseSql {
 
-	private List<BaseSql> children = new ArrayList<>();
-
 	private String key;
 	private String open;
 	private String close;
@@ -103,21 +101,15 @@ public class ForEachSql extends BaseSql {
 	}
 
 	private void toString( StringBuilder buffer, BaseSql node, int depth ) {
-
-		String tab = Strings.lpad( "", depth * 2, ' ' );
-
+		String tab = Strings.line( ' ', depth * 2 );
 		if( node instanceof IfSql ) {
-
 			IfSql ifNode = (IfSql) node;
-
 			for( BaseSql child : ifNode.children() ) {
 				toString( buffer, child, depth + 1 );
 			}
-
 		} else {
 			buffer.append( String.format( "%s%s", tab, node.toString() ) );
 		}
-
 	}
 
 	public String toString() {

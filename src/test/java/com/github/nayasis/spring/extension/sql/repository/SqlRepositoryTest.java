@@ -1,12 +1,12 @@
 package com.github.nayasis.spring.extension.sql.repository;
 
 import com.github.nayasis.spring.extension.sql.exception.DuplicatedQueryExistException;
+import com.github.nayasis.spring.extension.sql.phase.node.ForEachSql;
+import com.github.nayasis.spring.extension.sql.phase.node.IfSql;
 import com.github.nayasis.spring.extension.sql.phase.node.RootSql;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 public class SqlRepositoryTest {
@@ -26,7 +26,10 @@ public class SqlRepositoryTest {
 
         RootSql sql = SqlRepository.get( "Grammar.nestedForLoop" );
 
-        log.debug( "{}", sql );
+        ForEachSql foreach = (ForEachSql) sql.children().stream().filter( n -> n.getClass() == IfSql.class ).findFirst().orElse( null )
+            .children().stream().filter( n -> n.getClass() == ForEachSql.class ).findFirst().orElse( null );
+
+        log.debug( "{}", foreach );
 
     }
 
