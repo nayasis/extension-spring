@@ -114,10 +114,26 @@ public class ForEachSql extends BaseSql {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append( String.format( "[FOREACH %s]\n", summaryAttrs()) );
 		for( BaseSql node : children ) {
 			toString( sb, node, 0 );
 		}
 		return sb.toString();
+	}
+
+	private String summaryAttrs() {
+		List<String> attrs = new ArrayList<>();
+		attrs.add( deco("key"      , key     ) );
+		attrs.add( deco("open"     , open    ) );
+		attrs.add( deco("close"    , close   ) );
+		attrs.add( deco("concater" , concater) );
+		attrs.add( deco("index"    , index   ) );
+		return Strings.join( attrs, " " );
+	}
+
+	private String deco( String title, String value ) {
+		if( Strings.isEmpty(value) ) return "";
+		return String.format( "%s='%s'", title, value );
 	}
 
 	private String getSqlTemplate( QueryParameter param ) throws ParseException {
