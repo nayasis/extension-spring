@@ -82,7 +82,7 @@ public class TypeMapper {
     	put( LONGVARBINARY, new BlobMapper()       );
 
 		/**
-		 * java.sql.Date handle data as Date only and miss time information(HH:MI:SS).<br>
+		 * java.sql.Date handle data as Date only and miss time information(HH:MI:SS)
 		 * So It is necessary to handle data as TimeStamp
 		 */
 		put( DATE,          new TimeStampMapper()  );
