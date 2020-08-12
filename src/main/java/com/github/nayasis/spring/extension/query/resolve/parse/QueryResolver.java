@@ -1,9 +1,9 @@
-package com.github.nayasis.spring.extension.query.resolver;
+package com.github.nayasis.spring.extension.query.resolve.parse;
 
 import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.basica.validation.Assert;
 import com.github.nayasis.spring.extension.query.entity.QueryParameter;
-import com.github.nayasis.spring.extension.query.resolver.checker.ParamDetector;
+import com.github.nayasis.spring.extension.query.resolve.checker.ParamDetector;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

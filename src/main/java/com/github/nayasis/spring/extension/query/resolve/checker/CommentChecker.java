@@ -1,4 +1,4 @@
-package com.github.nayasis.spring.extension.query.resolver.checker;
+package com.github.nayasis.spring.extension.query.resolve.checker;
 
 public interface CommentChecker {
 

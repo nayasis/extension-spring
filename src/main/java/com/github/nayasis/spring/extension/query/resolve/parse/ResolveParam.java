@@ -1,4 +1,4 @@
-package com.github.nayasis.spring.extension.query.resolver;
+package com.github.nayasis.spring.extension.query.resolve.parse;
 
 import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.basica.model.NMap;

@@ -1,4 +1,4 @@
-package com.github.nayasis.spring.extension.query.resolver.checker.implement;
+package com.github.nayasis.spring.extension.query.resolve.checker.implement;
 
 
 public class UnifiedQuotChecker {

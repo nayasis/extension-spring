@@ -1,7 +1,7 @@
-package com.github.nayasis.spring.extension.query.resolver.checker.implement;
+package com.github.nayasis.spring.extension.query.resolve.checker.implement;
 
 
-import com.github.nayasis.spring.extension.query.resolver.checker.QuotChecker;
+import com.github.nayasis.spring.extension.query.resolve.checker.QuotChecker;
 
 public class SqlQuotChecker implements QuotChecker {
 
