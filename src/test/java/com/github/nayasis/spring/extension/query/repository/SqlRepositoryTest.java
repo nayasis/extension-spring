@@ -1,5 +1,7 @@
 package com.github.nayasis.spring.extension.query.repository;
 
+import com.github.nayasis.basica.model.NMap;
+import com.github.nayasis.basica.reflection.Reflector;
 import com.github.nayasis.spring.extension.query.entity.QueryParameter;
 import com.github.nayasis.spring.extension.query.exception.DuplicatedQueryExistException;
 import com.github.nayasis.spring.extension.query.phase.node.ForEachSql;
@@ -12,14 +14,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class SqlRepositoryTest {
 
     @BeforeAll
     public static void init() throws DuplicatedQueryExistException {
-        SqlRepository.readFrom( "/sql/Grammar.xml" );
+        SqlRepository.read( "/sql/Grammar.xml" );
     }
 
     @Test
@@ -35,16 +39,19 @@ public class SqlRepositoryTest {
         ForEachSql foreach = (ForEachSql) sql.children().stream().filter( n -> n.getClass() == IfSql.class ).findFirst().orElse( null )
             .children().stream().filter( n -> n.getClass() == ForEachSql.class ).findFirst().orElse( null );
 
-        QueryParameter param = new QueryParameter();
-        param.put( "user", sampleParam() );
+        QueryParameter param = new QueryParameter( sampleParam() );
 
         String query = foreach.toString( param );
 
         log.debug( ">> query\n{}", query );
 
+        log.debug( "{}", Reflector.toJson(param,true) );
+
     }
 
-    private List<User> sampleParam() {
+    private Map sampleParam() {
+
+        Map param = new HashMap();
 
         List<User> users = new ArrayList<>();
 
@@ -61,7 +68,11 @@ public class SqlRepositoryTest {
             }
         }
 
-        return users;
+        param.put( "user", users );
+
+        param.put( "condition", new NMap<>("{'limit':{'age':10}}") );
+
+        return param;
 
     }
 

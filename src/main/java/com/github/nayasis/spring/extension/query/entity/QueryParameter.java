@@ -34,15 +34,13 @@ public class QueryParameter extends NMap<String,Object> {
 
         clear();
 
-        NMap source = new NMap();
+        putAll( Reflector.toMapFrom(ThreadlocalQueryParameter.getAll()) );
 
         if( value == null || isPrimitive( value ) ) {
-            source.put( PARAMETER_SINGLE, value );
+            put( PARAMETER_SINGLE, value );
         } else {
-            source.bind( value );
+            bind( value );
         }
-
-        putAll( Reflector.merge( source, ThreadlocalQueryParameter.getAll() ) );
 
         return this;
 
@@ -55,11 +53,11 @@ public class QueryParameter extends NMap<String,Object> {
     }
 
     public boolean hasSingleParameter() {
-        return containsKey( PARAMETER_SINGLE );
+        return containsKey(PARAMETER_SINGLE);
     }
 
     public Object getSingleParameter() {
-        return get( PARAMETER_SINGLE );
+        return get(PARAMETER_SINGLE);
     }
 
     public List<Integer> getForeachIndex() {

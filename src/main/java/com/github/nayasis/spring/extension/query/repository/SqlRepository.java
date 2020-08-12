@@ -69,7 +69,7 @@ public class SqlRepository {
 
     }
 
-    public void readFrom( String resourcePath ) throws DuplicatedQueryExistException {
+    public void read( String resourcePath ) throws DuplicatedQueryExistException {
         if( Strings.isEmpty(resourcePath) ) return;
         for( URL url : Classes.findResources(resourcePath) ) {
             read( url );
