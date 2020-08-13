@@ -1,5 +1,7 @@
 package com.github.nayasis.spring.extension.query.resolve.checker;
 
+import com.github.nayasis.spring.extension.query.resolve.parse.CircularQueue;
+
 public class ParamDetector {
 
     private CommentChecker comment;
@@ -10,18 +12,18 @@ public class ParamDetector {
         this.quot    = quot;
     }
 
-    public int find( String sql, String word, int start ) {
+    public int find( String query, String word, int start ) {
 
         comment.clear();
         quot.clear();
 
-        LimitedQueue queue = new LimitedQueue( word.length() );
+        CircularQueue queue = new CircularQueue( word.length() );
 
-        for( int i = start; i < sql.length(); i++ ) {
+        for( int i = start; i < query.length(); i++ ) {
 
-            char c = sql.charAt( i );
+            char c = query.charAt( i );
 
-            queue.add( c );
+            queue.enqueue( c );
 
             if( ! quot.on() && comment.read(c).on() )
                 continue;
@@ -30,7 +32,7 @@ public class ParamDetector {
                 continue;
 
             if( queue.equals(word) )
-                return i - word.length() - 1;
+                return i - word.length() + 1;
 
         }
 

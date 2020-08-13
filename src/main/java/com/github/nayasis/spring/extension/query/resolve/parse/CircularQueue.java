@@ -1,4 +1,4 @@
-package com.github.nayasis.spring.extension.query.resolve;
+package com.github.nayasis.spring.extension.query.resolve.parse;
 
 import com.github.nayasis.basica.validation.Validator;
 

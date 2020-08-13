@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-public class QueryResolver {
+public class QueryResolver<T> {
 
     private List<String>             queries = new ArrayList<>();
     private List<String>             keys    = new ArrayList<>();
@@ -31,25 +31,24 @@ public class QueryResolver {
         int index = 0;
 
         for( String query : queries ) {
-
-            res.append( query );
-
-            String       key   = keys.get( index++ );
-            ResolveParam param = params.get(key);
-
-            res.append( handler.handle(index,key,param) );
-
+            if( query == null ) {
+                String       key   = keys.get( index++ );
+                ResolveParam param = params.get(key);
+                res.append( handler.handle(index,key,param) );
+            } else {
+                res.append( query );
+            }
         }
 
         return Strings.compressEnter( res.toString() );
 
     }
 
-    public QueryResolver parse( String query, QueryParameter params ) {
+    public T parse( String query, QueryParameter params ) {
         Assert.notEmpty( query, "query is empty." );
         clear();
         parseQuery( dynamicQuery(query,params), params );
-        return this;
+        return (T) this;
     }
 
     private void clear() {
@@ -109,6 +108,8 @@ public class QueryResolver {
 
             if( param.valueContains() ) {
                 this.queries.add( query.substring(prev,start) );
+                this.queries.add( null );
+                this.keys.add( param.key() );
                 this.params.put( param.key(), param );
             }
 
