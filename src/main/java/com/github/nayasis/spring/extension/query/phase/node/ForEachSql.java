@@ -5,7 +5,7 @@ import com.github.nayasis.basica.base.Types;
 import com.github.nayasis.spring.extension.query.common.QueryConstant;
 import com.github.nayasis.spring.extension.query.entity.QueryParameter;
 import com.github.nayasis.spring.extension.query.phase.node.abstracts.BaseSql;
-import com.github.nayasis.spring.extension.query.sqlMaker.QueryResolver;
+import com.github.nayasis.spring.extension.query.resolve.parse.implement.SqlResolver;
 import org.springframework.expression.ParseException;
 
 import java.util.ArrayList;
@@ -13,11 +13,12 @@ import java.util.List;
 
 public class ForEachSql extends BaseSql {
 
-	private String key;
-	private String open;
-	private String close;
-	private String concater;
-	private String index;
+	private String  key;
+	private String  open;
+	private String  close;
+	private String  concater;
+	private String  index;
+	private boolean hasIndex;
 
 	public ForEachSql( String key, String open, String close, String concater, String index ) {
 		this.key      = Strings.trim( key );
@@ -25,19 +26,25 @@ public class ForEachSql extends BaseSql {
 		this.close    = Strings.trim( close );
 		this.concater = Strings.trim( concater );
 		this.index    = Strings.trim( index );
+		this.hasIndex = Strings.isNotEmpty( index );
 	}
 
 	@Override
     public String toString( QueryParameter inputParam ) throws ParseException {
 
-		List values = Types.toList( inputParam.getByPath(key) );
+		List values = getValues(inputParam);
 		if( values.isEmpty() ) return "";
 
 		List<String> phases = new ArrayList<>();
 
-		for( int i = 0; i <= values.size(); i++ ) {
+		for( int i = 0; i < values.size(); i++ ) {
 
-			String template = getSqlTemplate( inputParam );
+			QueryParameter param = inputParam.clone().setForEachInnerParam(key, values.get(i));
+
+			if( hasIndex )
+				param.put( index, i );
+
+			String template = getSqlTemplate( param );
 			template = bindSequenceToKey( template, key, i );
 			template = bindSequenceToIndex( template, inputParam, i );
 
@@ -48,6 +55,26 @@ public class ForEachSql extends BaseSql {
 		}
 
 		return assembleSql( phases );
+
+	}
+
+	private List getValues( QueryParameter param ) {
+
+		Object val = param.getByPath(key);
+
+		if( val != null )
+			return Types.toList(val);
+
+		if( param.hasForEachInnerParam() ) {
+			val = param.getForEachInnerParam( key );
+			if( val != null )
+				return Types.toList(val);
+		} else {
+			if( param.hasSingleParameter() )
+				return Types.toList( param.getSingleParameter() );
+		}
+
+		return new ArrayList();
 
 	}
 
@@ -69,21 +96,8 @@ public class ForEachSql extends BaseSql {
 
 	}
 
-	private boolean hasIndex() {
-		return Strings.isNotEmpty( index );
-	}
-
-	private String getKey( QueryParameter parameter ) {
-		if( ! parameter.containsByPath(key) ) {
-			if ( parameter.hasSingleParameter() ) {
-				return QueryConstant.PARAMETER_SINGLE;
-			}
-		}
-		return key;
-	}
-
 	private String bindSequenceToIndex( String sql, QueryParameter param, int i ) {
-		if( ! hasIndex() ) return sql;
+		if( ! hasIndex ) return sql;
 		String newIndex = String.format( "%s[%d]", QueryConstant.FOR_EACH_INDEX, param.addForeachIndex(i) );
 		return replaceKey( sql, index, newIndex );
 	}
@@ -135,9 +149,7 @@ public class ForEachSql extends BaseSql {
 
 	private String getSqlTemplate( QueryParameter param ) throws ParseException {
 		String template = super.toString( param );
-		template = QueryResolver.bindDynamicQuery( template, param );
-		template = QueryResolver.bindSingleParameterKey( template, param );
-		return template;
+		return new SqlResolver().dynamicQuery( template, param );
 	}
 
 //	private List getValues( QueryParameter parameter, String key ) {

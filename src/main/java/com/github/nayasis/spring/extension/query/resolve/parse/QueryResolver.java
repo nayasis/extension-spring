@@ -57,7 +57,7 @@ public class QueryResolver<T> {
         params.clear();
     }
 
-    private String dynamicQuery( String query, QueryParameter params ) {
+    public String dynamicQuery( String query, QueryParameter params ) {
 
         StringBuilder sql = new StringBuilder();
 
