@@ -10,9 +10,12 @@ import org.springframework.expression.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ForEachSql extends BaseSql {
 
+	public static final SqlResolver QUERY_RESOLVER = new SqlResolver();
 	private String  key;
 	private String  open;
 	private String  close;
@@ -98,8 +101,8 @@ public class ForEachSql extends BaseSql {
 
 	private String bindSequenceToIndex( String sql, QueryParameter param, int i ) {
 		if( ! hasIndex ) return sql;
-		String newIndex = String.format( "%s[%d]", QueryConstant.FOR_EACH_INDEX, param.addForeachIndex(i) );
-		return replaceKey( sql, index, newIndex );
+		String paramIdx = String.format( "%s[%d]", QueryConstant.FOR_EACH_INDEX, param.addForeachIndex(i) );
+		return replaceKey( sql, index, paramIdx );
 	}
 
 	private String bindSequenceToKey( String sql, String key, int i ) {
@@ -108,7 +111,28 @@ public class ForEachSql extends BaseSql {
 	}
 
 	private String replaceKey( String sql, String keyOrigin, String keyReplace ) {
-		return sql.replaceAll( String.format( "#\\{%s(\\..+?)?\\}", keyOrigin ), String.format( "#{%s$1}", keyReplace ) );
+
+		StringBuilder sb = new StringBuilder();
+
+		Pattern pattern = Pattern.compile( String.format("%s(\\..+?)?", keyOrigin) );
+
+		QUERY_RESOLVER.parse(sql, "#{", "}", ( prev, keyword, start, end ) -> {
+
+			Matcher matcher = pattern.matcher(keyword);
+
+			if( matcher.matches() ) {
+				sb.append( sql.substring(prev, start) );
+				sb.append("#{").append( keyReplace ).append( matcher.replaceFirst("$1") ).append("}");
+			} else {
+				sb.append( sql.substring(prev,end) );
+			}
+
+		}, remain -> {
+			sb.append( remain );
+		});
+
+		return sb.toString();
+
 	}
 
 	private void toString( StringBuilder buffer, BaseSql node, int depth ) {
@@ -149,7 +173,7 @@ public class ForEachSql extends BaseSql {
 
 	private String getSqlTemplate( QueryParameter param ) throws ParseException {
 		String template = super.toString( param );
-		return new SqlResolver().dynamicQuery( template, param );
+		return QUERY_RESOLVER.dynamicQuery( template, param );
 	}
 
 //	private List getValues( QueryParameter parameter, String key ) {
