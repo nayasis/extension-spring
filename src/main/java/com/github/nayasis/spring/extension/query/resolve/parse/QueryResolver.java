@@ -61,71 +61,71 @@ public class QueryResolver<T> {
 
         StringBuilder sql = new StringBuilder();
 
-        int prev = 0;
-
-        while( true ) {
-
-            int start = detector.find( query, "${", prev );
-            if( start < 0 ) break;
-
-            int end = getEndIndex( query, '}', start );
-            if( end < 0 ) break;
-
-            String keyword = query.substring( start + 2, end );
+        parse(query, "${", "}", ( prev, keyword, start, end ) -> {
 
             ResolveParam param = new ResolveParam(keyword).bindValue(params);
 
             if( param.valueContains() ) {
                 sql.append( query.substring(prev,start) );
                 sql.append( param.value() );
+            } else {
+                sql.append( query.substring(prev,end) );
             }
 
-            prev = end + 1;
-
-        }
-
-        sql.append( query.substring(prev) );
+        }, remain -> {
+            sql.append( remain );
+        });
 
         return sql.toString();
 
     }
 
-    private void parseQuery( String query, QueryParameter params ) {
+    public void parseQuery( String query, QueryParameter params ) {
+
+        parse(query, "#{", "}", ( prev, keyword, start, end ) -> {
+
+            ResolveParam param = new ResolveParam(keyword).bindValueOrDefault(params);
+
+            if( param.valueContains() ) {
+                queries.add( query.substring(prev,start) );
+                queries.add( null );
+                keys.add( param.key() );
+                this.params.put( param.key(), param );
+            } else {
+                queries.add( query.substring(prev,end) );
+            }
+
+        }, remain -> {
+            queries.add( remain );
+        });
+
+    }
+
+    public void parse( String query, String startPattern, String endPattern, PatternHandler patternHandler, RemainHandler remainHandler ) {
 
         int prev = 0;
 
         while( true ) {
 
-            int start = detector.find( query, "#{", prev );
+            int start = detector.find( query, startPattern, prev );
             if( start < 0 ) break;
 
-            int end = getEndIndex( query, '}', start );
+            int end = detector.find( query, endPattern, start );
             if( end < 0 ) break;
 
-            String keyword = query.substring( start + 2, end );
+            String keyword = query.substring( start + startPattern.length(), end );
 
-            ResolveParam param = new ResolveParam(keyword).bindValueOrDefault(params);
-
-            if( param.valueContains() ) {
-                this.queries.add( query.substring(prev,start) );
-                this.queries.add( null );
-                this.keys.add( param.key() );
-                this.params.put( param.key(), param );
-            }
+            patternHandler.found( prev, keyword, start, end + 1 );
 
             prev = end + 1;
 
         }
 
-        queries.add( query.substring(prev) );
+        String remain = query.substring(prev);
 
-    }
+        if( ! remain.isEmpty() )
+            remainHandler.found( remain );
 
-    private int getEndIndex( String query, char find, int start ) {
-        for( int i = start; i < query.length(); i++ ) {
-            if( query.charAt(i) == find ) return i;
-        }
-        return -1;
     }
 
 }
