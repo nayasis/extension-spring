@@ -10,6 +10,7 @@ import com.github.nayasis.spring.extension.query.phase.node.RootSql;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -46,6 +47,27 @@ public class QueryRepositoryTest {
         log.debug( ">> query\n{}", query );
 
         log.debug( "{}", Reflector.toJson(param,true) );
+
+        Assertions.assertEquals( "[0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 1]", param.getForeachIndex().toString() );
+
+        for( int i = 0; i < 2; i++ ) {
+
+            String key1 = String.format("#{user[%d].name}", i );
+            Assertions.assertTrue( query.contains(key1) );
+
+            for( int j=0; j < 2; j++ ) {
+
+                String key2 = String.format("#{user[%d].dept[%d].name}", i,j );
+                Assertions.assertTrue( query.contains(key2) );
+
+                for( int k = 0; k < 3; k++ ) {
+
+                    String key3 = String.format("#{user[%d].dept[%d].subDept[%d].name}", i,j,k );
+                    Assertions.assertTrue( query.contains(key3) );
+
+                }
+            }
+        }
 
     }
 
