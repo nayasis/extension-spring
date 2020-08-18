@@ -5,7 +5,6 @@ import com.github.nayasis.basica.base.Types;
 import com.github.nayasis.spring.extension.query.common.QueryConstant;
 import com.github.nayasis.spring.extension.query.entity.QueryParameter;
 import com.github.nayasis.spring.extension.query.phase.node.abstracts.BaseSql;
-import com.github.nayasis.spring.extension.query.resolve.parse.implement.SqlResolver;
 import org.springframework.expression.ParseException;
 
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.regex.Pattern;
 
 public class ForEachSql extends BaseSql {
 
-	public static final SqlResolver QUERY_RESOLVER = new SqlResolver();
 	private String  key;
 	private String  open;
 	private String  close;
@@ -116,7 +114,7 @@ public class ForEachSql extends BaseSql {
 
 		Pattern pattern = Pattern.compile( String.format("%s(\\..+?)?", keyOrigin) );
 
-		QUERY_RESOLVER.parse(sql, "#{", "}", ( prev, keyword, start, end ) -> {
+		createQueryResolver().parse(sql, "#{", "}", ( prev, keyword, start, end ) -> {
 
 			Matcher matcher = pattern.matcher(keyword);
 
@@ -167,28 +165,13 @@ public class ForEachSql extends BaseSql {
 	}
 
 	private String deco( String title, String value ) {
-		if( Strings.isEmpty(value) ) return "";
+		if( Strings.isEmpty(value) ) return null;
 		return String.format( "%s='%s'", title, value );
 	}
 
 	private String getSqlTemplate( QueryParameter param ) throws ParseException {
 		String template = super.toString( param );
-		return QUERY_RESOLVER.dynamicQuery( template, param );
+		return createQueryResolver().dynamicQuery( template, param );
 	}
-
-//	private List getValues( QueryParameter parameter, String key ) {
-//
-//		Object value = parameter.getByPath( key );
-//		if( value == null ) return new ArrayList();
-//
-//		if( value instanceof List ) {
-//			return (List) value;
-//		} else if( Types.isArrayOrCollection(value) ) {
-//			return Types.toList( value );
-//		} else {
-//			return Arrays.asList( value );
-//		}
-//
-//	}
 
 }

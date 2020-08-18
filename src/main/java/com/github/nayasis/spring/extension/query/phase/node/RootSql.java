@@ -1,6 +1,7 @@
 package com.github.nayasis.spring.extension.query.phase.node;
 
 import com.github.nayasis.spring.extension.query.phase.node.abstracts.BaseSql;
+import com.github.nayasis.spring.extension.query.resolve.parse.QueryResolver;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.springframework.expression.ParseException;
@@ -21,12 +22,14 @@ public class RootSql extends BaseSql {
 	}
 
 	private void resolveMainId( String mainId, BaseSql node ) {
-
 		if( node instanceof RefSql )
 			((RefSql)node).resolveMainId( mainId );
-
 		node.children().forEach( child -> resolveMainId(mainId, child) );
+	}
 
+	protected RootSql setQueryResolver( Class<? extends QueryResolver> classQueryResolver ) {
+		super.setQueryResolver(classQueryResolver);
+		return this;
 	}
 
 	public boolean isNotValid() {

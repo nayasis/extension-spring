@@ -4,6 +4,9 @@ import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.basica.validation.Assert;
 import com.github.nayasis.spring.extension.query.entity.QueryParameter;
 import com.github.nayasis.spring.extension.query.resolve.checker.ParamDetector;
+import com.github.nayasis.spring.extension.query.resolve.parse.handler.ParamHandler;
+import com.github.nayasis.spring.extension.query.resolve.parse.handler.PatternHandler;
+import com.github.nayasis.spring.extension.query.resolve.parse.handler.RemainHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

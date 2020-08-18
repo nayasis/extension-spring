@@ -19,22 +19,22 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-public class SqlRepositoryTest {
+public class QueryRepositoryTest {
 
     @BeforeAll
     public static void init() throws DuplicatedQueryExistException {
-        SqlRepository.read( "/sql/Grammar.xml" );
+        QueryRepository.read( "/sql/Grammar.xml" );
     }
 
     @Test
     public void basic() {
-        log.debug( "{}", SqlRepository.log() );
+        log.debug( "{}", QueryRepository.log() );
     }
 
     @Test
     public void logForeach() {
 
-        RootSql sql = SqlRepository.get( "Grammar.nestedForLoop" );
+        RootSql sql = QueryRepository.get( "Grammar.nestedForLoop" );
 
         ForEachSql foreach = (ForEachSql) sql.children().stream().filter( n -> n.getClass() == IfSql.class ).findFirst().orElse( null )
             .children().stream().filter( n -> n.getClass() == ForEachSql.class ).findFirst().orElse( null );

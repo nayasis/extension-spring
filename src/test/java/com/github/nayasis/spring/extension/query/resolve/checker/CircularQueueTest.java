@@ -1,4 +1,4 @@
-package com.github.nayasis.spring.extension.query.resolve.parse;
+package com.github.nayasis.spring.extension.query.resolve.checker;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

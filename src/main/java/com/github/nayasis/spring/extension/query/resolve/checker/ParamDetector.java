@@ -1,7 +1,5 @@
 package com.github.nayasis.spring.extension.query.resolve.checker;
 
-import com.github.nayasis.spring.extension.query.resolve.parse.CircularQueue;
-
 public class ParamDetector {
 
     private CommentChecker comment;

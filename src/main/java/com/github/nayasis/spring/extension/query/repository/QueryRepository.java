@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Slf4j
 @UtilityClass
-public class SqlRepository {
+public class QueryRepository {
 
     private Map<String,RootSql> repository;
 
@@ -88,10 +88,10 @@ public class SqlRepository {
 
             String id = node.getAttr( "id" );
 
-            Assert.notEmpty( id, "SQL ID is missing in resource({})\n{}", url, node );
+            Assert.notEmpty( id, "Query ID is missing in resource({})\n{}", url, node );
 
             if( contains( String.format("%s.%s", baseId, id) ) )
-                throw new DuplicatedQueryExistException( "SQL ID({}.{}) is duplicated in resource({})", baseId, id, url );
+                throw new DuplicatedQueryExistException( "Query ID({}.{}) is duplicated in resource({})", baseId, id, url );
 
             put( sqlMaker.make(baseId, id, node) );
 

@@ -32,9 +32,7 @@ public class QueryParameter extends NMap<String,Object> {
      * @param value single value (primitive or array or list) or Map
      * @return self instance
      */
-    public QueryParameter init( Object value ) {
-
-        clear();
+    private void init( Object value ) {
 
         putAll( Reflector.toMapFrom(ThreadlocalQueryParameter.getAll()) );
 
@@ -44,7 +42,7 @@ public class QueryParameter extends NMap<String,Object> {
             bind( value );
         }
 
-        return this;
+        put( FOR_EACH_INDEX, new ArrayList<Integer>() );
 
     }
 
@@ -63,10 +61,7 @@ public class QueryParameter extends NMap<String,Object> {
     }
 
     public List<Integer> getForeachIndex() {
-        if( ! containsKey(FOR_EACH_INDEX) ) {
-            put( FOR_EACH_INDEX, new ArrayList<Integer>() );
-        }
-        return (List<Integer>) get( FOR_EACH_INDEX );
+        return (List<Integer>) get(FOR_EACH_INDEX);
     }
 
     /**

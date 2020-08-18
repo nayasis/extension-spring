@@ -1,5 +1,6 @@
 package com.github.nayasis.spring.extension.query.phase.node.abstracts;
 
+import com.github.nayasis.basica.base.Classes;
 import com.github.nayasis.basica.base.Strings;
 import com.github.nayasis.spring.extension.query.entity.QueryParameter;
 import com.github.nayasis.spring.extension.query.phase.node.ElseIfSql;
@@ -8,6 +9,8 @@ import com.github.nayasis.spring.extension.query.phase.node.IfSql;
 import com.github.nayasis.spring.extension.query.phase.node.RootSql;
 import com.github.nayasis.spring.extension.query.phase.node.WhenFirstSql;
 import com.github.nayasis.spring.extension.query.phase.node.WhenSql;
+import com.github.nayasis.spring.extension.query.resolve.parse.QueryResolver;
+import com.github.nayasis.spring.extension.query.resolve.parse.implement.SqlResolver;
 import org.springframework.expression.ParseException;
 
 import java.util.ArrayList;
@@ -17,6 +20,8 @@ public abstract class BaseSql {
 
 	protected BaseSql       parent   = null;
     protected List<BaseSql> children = new ArrayList<>();
+
+    protected Class<? extends QueryResolver> classQueryResolver = SqlResolver.class;
 
 	public String toString( QueryParameter param ) throws ParseException {
 		StringBuilder sb = new StringBuilder();
@@ -54,6 +59,16 @@ public abstract class BaseSql {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+
+	protected BaseSql setQueryResolver( Class<? extends QueryResolver> classQueryResolver ) {
+		this.classQueryResolver = classQueryResolver;
+		children.forEach( child -> child.setQueryResolver(classQueryResolver) );
+		return this;
+	}
+
+	protected QueryResolver createQueryResolver() {
+		return Classes.createInstance( classQueryResolver );
 	}
 
 	public List<BaseSql> children() {

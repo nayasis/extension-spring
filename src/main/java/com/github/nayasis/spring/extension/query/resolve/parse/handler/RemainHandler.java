@@ -1,4 +1,4 @@
-package com.github.nayasis.spring.extension.query.resolve.parse;
+package com.github.nayasis.spring.extension.query.resolve.parse.handler;
 
 @FunctionalInterface
 public interface RemainHandler {
