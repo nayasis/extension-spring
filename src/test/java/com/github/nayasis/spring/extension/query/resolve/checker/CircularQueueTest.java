@@ -55,4 +55,26 @@ public class CircularQueueTest {
 
     }
 
+    @Test
+    public void reverse_index() {
+
+        CircularQueue queue = new CircularQueue( 3 );
+
+        queue.enqueue( 'a' );
+//        Assertions.assertEquals( 'a', queue.get(-1) );
+
+        queue.enqueue( 'b' );
+//        Assertions.assertEquals( 'b', queue.get(-1) );
+
+        queue.enqueue( 'c' );
+//        Assertions.assertEquals( 'c', queue.get(-1) );
+
+        queue.enqueue( 'd' );
+        Assertions.assertEquals( 'd', queue.get(-1) );
+        Assertions.assertEquals( 'c', queue.get(-2) );
+        Assertions.assertEquals( 'b', queue.get(-3) );
+        Assertions.assertEquals( 'd', queue.get(-4) );
+
+    }
+
 }

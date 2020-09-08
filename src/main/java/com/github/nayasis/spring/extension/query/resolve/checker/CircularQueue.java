@@ -18,7 +18,7 @@ public class CircularQueue {
         queue[ tail ] = c;
         tail = ( tail + 1 ) % capacity;
         if( tail == head ) {
-            head = ( head + 1 ) % capacity;
+            head = index(1);
         }
     }
 
@@ -26,16 +26,21 @@ public class CircularQueue {
         if( head == tail )
             throw new IndexOutOfBoundsException("empty queue");
         char removed = queue[head];
-        head = ( head + 1 ) % capacity;
+        head = index(1);
         return removed;
     }
 
     public char get( int i ) {
-        int size = size();
-        if( i < 0 || i >= size() )
-            throw new IndexOutOfBoundsException( String.format("Index %d, queue size %d", i, size) );
-        int idx = ( head + i ) % capacity;
-        return queue[ idx ];
+        return queue[ index(i) ];
+    }
+
+    private int index( int i ) {
+        if( i < 0 ) {
+            int capacity = this.capacity - 1;
+            return index( (size() + (i % capacity)) % capacity );
+        } else {
+            return ( head + i ) % capacity;
+        }
     }
 
     public int size() {
@@ -49,8 +54,7 @@ public class CircularQueue {
         int size = size();
         char[] array = new char[size];
         for( int i = 0; i < size; i++ ) {
-            int idx = ( head + i ) % capacity;
-            array[i] = queue[idx];
+            array[i] = queue[index(i)];
         }
         return array;
     }
