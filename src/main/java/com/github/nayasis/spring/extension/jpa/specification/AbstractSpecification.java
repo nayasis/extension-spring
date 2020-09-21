@@ -12,7 +12,7 @@ public abstract class AbstractSpecification<T> {
 
     public abstract Specification<T> build();
 
-    protected Specification<T> in( String key, Collection values ) {
+    protected Specification<T> contains( String key, Collection values ) {
         return (Specification<T>) ( root, query, cb ) -> {
             if( Validator.isNotEmpty(values) ) {
                 Path<Object> column = getPath( root, key );
