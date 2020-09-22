@@ -1,10 +1,14 @@
 package com.github.nayasis.spring.extension.jpa.specification;
 
+import com.github.nayasis.basica.model.NDate;
 import com.github.nayasis.basica.validation.Validator;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -89,90 +93,109 @@ public abstract class AbstractSpecification<T> {
         };
     }
 
-    protected Specification<T> lessThan( String key, String value ) {
+    protected Specification<T> lessThan( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
             if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.lessThan( getPath(root, key), value );
+            Path path = getPath(root, key);
+
+            if( value instanceof Integer )
+                return cb.lessThan( path, (Integer) value );
+            if( value instanceof Double )
+                return cb.lessThan( path, (Double) value );
+            if( value instanceof Float )
+                return cb.lessThan( path, (Float) value );
+            if( value instanceof BigDecimal )
+                return cb.lessThan( path, (BigDecimal) value );
+            if( value instanceof BigInteger )
+                return cb.lessThan( path, (BigInteger) value );
+            if( value instanceof LocalDateTime )
+                return cb.lessThan( path, (LocalDateTime) value );
+            if( value instanceof LocalDate )
+                return cb.lessThan( path, (LocalDate) value );
+            if( value instanceof NDate )
+                return cb.lessThan( path, ((NDate) value).toLocalDateTime() );
+
+            return cb.lessThan( path, value.toString() );
         };
     }
 
-    protected Specification<T> lessThanOrEqual( String key, String value ) {
+    protected Specification<T> lessThanOrEqual( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
             if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.lessThanOrEqualTo( getPath(root, key), value );
+            Path path = getPath(root, key);
+
+            if( value instanceof Integer )
+                return cb.lessThanOrEqualTo( path, (Integer) value );
+            if( value instanceof Double )
+                return cb.lessThanOrEqualTo( path, (Double) value );
+            if( value instanceof Float )
+                return cb.lessThanOrEqualTo( path, (Float) value );
+            if( value instanceof BigDecimal )
+                return cb.lessThanOrEqualTo( path, (BigDecimal) value );
+            if( value instanceof BigInteger )
+                return cb.lessThanOrEqualTo( path, (BigInteger) value );
+            if( value instanceof LocalDateTime )
+                return cb.lessThanOrEqualTo( path, (LocalDateTime) value );
+            if( value instanceof LocalDate )
+                return cb.lessThanOrEqualTo( path, (LocalDate) value );
+            if( value instanceof NDate )
+                return cb.lessThanOrEqualTo( path, ((NDate) value).toLocalDateTime() );
+
+            return cb.lessThanOrEqualTo( path, value.toString() );
         };
     }
 
-    protected Specification<T> greaterThan( String key, String value ) {
+    protected Specification<T> greaterThan( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
             if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.greaterThan( getPath(root, key), value );
+            Path path = getPath(root, key);
+
+            if( value instanceof Integer )
+                return cb.greaterThan( path, (Integer) value );
+            if( value instanceof Double )
+                return cb.greaterThan( path, (Double) value );
+            if( value instanceof Float )
+                return cb.greaterThan( path, (Float) value );
+            if( value instanceof BigDecimal )
+                return cb.greaterThan( path, (BigDecimal) value );
+            if( value instanceof BigInteger )
+                return cb.greaterThan( path, (BigInteger) value );
+            if( value instanceof LocalDateTime )
+                return cb.greaterThan( path, (LocalDateTime) value );
+            if( value instanceof LocalDate )
+                return cb.greaterThan( path, (LocalDate) value );
+            if( value instanceof NDate )
+                return cb.greaterThan( path, ((NDate) value).toLocalDateTime() );
+
+            return cb.greaterThan( path, value.toString() );
         };
     }
 
-    protected Specification<T> greaterThanOrEqual( String key, String value ) {
+    protected Specification<T> greaterThanOrEqual( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
             if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.greaterThanOrEqualTo( getPath(root, key), value );
+            Path path = getPath(root, key);
+
+            if( value instanceof Integer )
+                return cb.greaterThanOrEqualTo( path, (Integer) value );
+            if( value instanceof Double )
+                return cb.greaterThanOrEqualTo( path, (Double) value );
+            if( value instanceof Float )
+                return cb.greaterThanOrEqualTo( path, (Float) value );
+            if( value instanceof BigDecimal )
+                return cb.greaterThanOrEqualTo( path, (BigDecimal) value );
+            if( value instanceof BigInteger )
+                return cb.greaterThanOrEqualTo( path, (BigInteger) value );
+            if( value instanceof LocalDateTime )
+                return cb.greaterThanOrEqualTo( path, (LocalDateTime) value );
+            if( value instanceof LocalDate )
+                return cb.greaterThanOrEqualTo( path, (LocalDate) value );
+            if( value instanceof NDate )
+                return cb.greaterThanOrEqualTo( path, ((NDate) value).toLocalDateTime() );
+
+            return cb.greaterThanOrEqualTo( path, value.toString() );
         };
     }
-
-    protected Specification<T> lessThan( String key, LocalDateTime value ) {
-        return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.lessThan( getPath(root, key), value );
-        };
-    }
-
-    protected Specification<T> lessThanOrEqual( String key, LocalDateTime value ) {
-        return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.lessThanOrEqualTo( getPath(root, key), value );
-        };
-    }
-
-    protected Specification<T> greaterThan( String key, LocalDateTime value ) {
-        return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.greaterThan( getPath(root, key), value );
-        };
-    }
-
-    protected Specification<T> greaterThanOrEqual( String key, LocalDateTime value ) {
-        return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.greaterThanOrEqualTo( getPath(root, key), value );
-        };
-    }
-
-    protected Specification<T> lessThan( String key, Integer value ) {
-        return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.lessThan( getPath(root, key), value );
-        };
-    }
-
-    protected Specification<T> lessThanOrEqual( String key, Integer value ) {
-        return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.lessThanOrEqualTo( getPath(root, key), value );
-        };
-    }
-
-    protected Specification<T> greaterThan( String key, Integer value ) {
-        return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.greaterThan( getPath(root, key), value );
-        };
-    }
-
-    protected Specification<T> greaterThanOrEqual( String key, Integer value ) {
-        return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
-            return cb.greaterThanOrEqualTo( getPath(root, key), value );
-        };
-    }
-
 
     protected Specification<T> junction( Specification specification ) {
         return (Specification<T>) specification;
