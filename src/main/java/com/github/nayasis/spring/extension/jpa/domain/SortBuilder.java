@@ -18,42 +18,42 @@ import static com.github.nayasis.basica.base.Strings.isEmpty;
 public class SortBuilder {
 
     /**
-     * build sort rule
+     * build sort expression
      *
-     * @param rule  sort rule like "colA,direction1 &amp; colB direction2 &amp; ..."
-     *              ex. name,asc &amp; id,desc
-     * @return query sorting rule
+     * @param expression  sort expression like "colA,direction1 ^ colB direction2 ^ ..."
+     *              ex. name,asc ^ id,desc
+     * @return query sorting expression
      */
-    public Sort toSort( String rule ) {
-        return toSort( rule, null );
+    public Sort toSort( String expression ) {
+        return toSort( expression, null );
     }
 
 
     /**
-     * build sort rule
+     * build sort expression
      *
-     * @param rule  sort rule like "colA,direction1 &amp; colB direction2 &amp; ..."
-     *              ex. name,asc &amp; id,desc
-     * @param defaultRule   default sort rule if rule is empty
-     * @return query sorting rule
+     * @param expression  sort expression like "colA,direction1 ^ colB direction2 ^ ..."
+     *              ex. name,asc ^ id,desc
+     * @param defaultExpression   default sort expression if expression is empty
+     * @return query sorting expression
      */
-    public Sort toSort( String rule, String defaultRule ) {
-        List<Order> orders = toOrders( rule );
-        if( isEmpty(rule) )
-            orders = toOrders( defaultRule );
+    public Sort toSort( String expression, String defaultExpression ) {
+        List<Order> orders = toOrders( expression );
+        if( isEmpty(expression) )
+            orders = toOrders( defaultExpression );
         return Sort.by( orders );
     }
 
     /**
      * build order rules
      *
-     * @param rule order creation rule like colA,direction1 &amp; colB direction2 &amp; ..."
-     *             ex. name,asc &amp; id,desc
+     * @param expression order creation expression like colA,direction1 ^ colB direction2 ^ ..."
+     *             ex. name,asc ^ id,desc
      * @return multiple orders
      */
-    public List<Order> toOrders( String rule ) {
+    public List<Order> toOrders( String expression ) {
         List<Order> orders = new ArrayList<>();
-        for( String param : Strings.split(rule, "&") ) {
+        for( String param : Strings.split(expression, "^") ) {
             Order order = toOrder(param);
             if (order == null) continue;
             orders.add(order);
@@ -64,15 +64,15 @@ public class SortBuilder {
     /**
      * build order
      *
-     * @param rule order rule like "column,direction"
+     * @param expression order expression like "column,direction"
      *             ex1. colA,desc
      *             ex2. colA,asc
      *             ex3. colA
      * @return order
      */
-    public Order toOrder( String rule ) {
+    public Order toOrder( String expression ) {
 
-        List<String> words = Strings.split( rule, "," );
+        List<String> words = Strings.split( expression, "," );
 
         String column    = words.size() > 0 ? words.get(0) : "";
         String direction = words.size() > 1 ? words.get(1) : "";
