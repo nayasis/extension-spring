@@ -11,8 +11,8 @@ import org.springframework.data.domain.Sort;
 @Accessors(fluent=true)
 public class PageParam {
 
-    private int  page = 1;
-    private int  size = 100;
+    private int  page = 0;
+    private int  size = 10;
     private Sort sort = Sort.unsorted();
 
     public PageParam sort( Sort sort ) {
