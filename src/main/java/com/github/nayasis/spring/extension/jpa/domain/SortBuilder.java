@@ -53,7 +53,7 @@ public class SortBuilder {
      */
     public List<Order> toOrders( String expression ) {
         List<Order> orders = new ArrayList<>();
-        for( String param : Strings.split(expression, "^") ) {
+        for( String param : Strings.split(expression, "\\^") ) {
             Order order = toOrder(param);
             if (order == null) continue;
             orders.add(order);
