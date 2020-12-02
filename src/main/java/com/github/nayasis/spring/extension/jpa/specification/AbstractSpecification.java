@@ -12,13 +12,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import static com.github.nayasis.basica.validation.Validator.*;
+
 public abstract class AbstractSpecification<T> {
 
     public abstract Specification<T> build();
 
     protected Specification<T> contains( String key, Collection values ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isNotEmpty(values) ) {
+            if( isNotEmpty(values) ) {
                 Path<Object> column = getPath( root, key );
                 CriteriaBuilder.In<Object> in = cb.in( column );
                 values.forEach( status -> {
@@ -32,21 +34,21 @@ public abstract class AbstractSpecification<T> {
 
     protected Specification<T> like( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
+            if( isEmpty(value) ) return cb.conjunction();
             return cb.like( getPath(root, key), "%" + value + "%" );
         };
     }
 
     protected Specification<T> notLike( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
+            if( isEmpty(value) ) return cb.conjunction();
             return cb.notLike( getPath(root, key), "%" + value + "%" );
         };
     }
 
     protected Specification<T> likes( String key, Collection values ) {
         Specification<T> specification = null;
-        if( Validator.isNotEmpty(values) ) {
+        if( isNotEmpty(values) ) {
             for( Object value : values ) {
                 if( value == null ) continue;
                 if( specification == null ) {
@@ -61,7 +63,7 @@ public abstract class AbstractSpecification<T> {
 
     protected Specification<T> notLikes( String key, Collection values ) {
         Specification<T> specification = null;
-        if( Validator.isNotEmpty(values) ) {
+        if( isNotEmpty(values) ) {
             for( Object value : values ) {
                 if( value == null ) continue;
                 if( specification == null ) {
@@ -88,14 +90,40 @@ public abstract class AbstractSpecification<T> {
 
     protected Specification<T> equal( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
+            if( isEmpty(value) ) return cb.conjunction();
             return cb.equal( getPath(root, key), value );
+        };
+    }
+
+    protected <E> Specification<T> between( String key, E from, E to ) {
+        return (Specification<T>) ( root, query, cb ) -> {
+            if( isEmpty(from) || isEmpty(to) ) return cb.conjunction();
+            Path path = getPath(root, key);
+
+            if( from instanceof Integer )
+                return cb.between( path, (Integer) from, (Integer) to );
+            if( from instanceof Double )
+                return cb.between( path, (Double) from, (Double) to );
+            if( from instanceof Float )
+                return cb.between( path, (Float) from, (Float) to );
+            if( from instanceof BigDecimal )
+                return cb.between( path, (BigDecimal) from, (BigDecimal) to );
+            if( from instanceof BigInteger )
+                return cb.between( path, (BigInteger) from, (BigInteger) to );
+            if( from instanceof LocalDateTime )
+                return cb.between( path, (LocalDateTime) from, (LocalDateTime) to );
+            if( from instanceof LocalDate )
+                return cb.between( path, (LocalDate) from, (LocalDate) to );
+            if( from instanceof NDate )
+                return cb.between( path, ((NDate) from).toLocalDateTime(), ((NDate) to).toLocalDateTime() );
+
+            return cb.between( path, from.toString(), to.toString() );
         };
     }
 
     protected Specification<T> lessThan( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
+            if( isEmpty(value) ) return cb.conjunction();
             Path path = getPath(root, key);
 
             if( value instanceof Integer )
@@ -121,7 +149,7 @@ public abstract class AbstractSpecification<T> {
 
     protected Specification<T> lessThanOrEqual( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
+            if( isEmpty(value) ) return cb.conjunction();
             Path path = getPath(root, key);
 
             if( value instanceof Integer )
@@ -147,7 +175,7 @@ public abstract class AbstractSpecification<T> {
 
     protected Specification<T> greaterThan( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
+            if( isEmpty(value) ) return cb.conjunction();
             Path path = getPath(root, key);
 
             if( value instanceof Integer )
@@ -173,7 +201,7 @@ public abstract class AbstractSpecification<T> {
 
     protected Specification<T> greaterThanOrEqual( String key, Object value ) {
         return (Specification<T>) ( root, query, cb ) -> {
-            if( Validator.isEmpty(value) ) return cb.conjunction();
+            if( isEmpty(value) ) return cb.conjunction();
             Path path = getPath(root, key);
 
             if( value instanceof Integer )
