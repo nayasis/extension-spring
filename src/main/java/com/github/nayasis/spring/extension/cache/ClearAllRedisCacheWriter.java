@@ -25,7 +25,6 @@ import static org.springframework.data.redis.core.ScanOptions.scanOptions;
 /**
  * Redis cache writer to clear all keys on production redis cluster.
  *
- * @Author nayasis@gmail.com
  * @since  2020-06-23
  */
 @Slf4j
