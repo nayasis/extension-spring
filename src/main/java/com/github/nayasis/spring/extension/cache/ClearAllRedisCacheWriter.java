@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -32,6 +33,8 @@ public class ClearAllRedisCacheWriter implements RedisCacheWriter {
 
     private final RedisConnectionFactory connectionFactory;
     private final Duration               sleepTime;
+
+    private static Set<String> CACHE_NAME_ON_CLEANING = ConcurrentHashMap.newKeySet();
 
     public ClearAllRedisCacheWriter( RedisConnectionFactory connectionFactory ) {
         this(connectionFactory, Duration.ZERO);
@@ -117,6 +120,13 @@ public class ClearAllRedisCacheWriter implements RedisCacheWriter {
 
         execute(name, connection -> {
 
+            if( CACHE_NAME_ON_CLEANING.contains(name) ) {
+                log.error( "cancel cache cleaning because task({}) is already running.", name );
+                return "DONE";
+            }
+
+            CACHE_NAME_ON_CLEANING.add(name);
+
             long        total = 0L;
             Set<byte[]> keys  = new HashSet();
 
@@ -138,6 +148,7 @@ public class ClearAllRedisCacheWriter implements RedisCacheWriter {
 
             } finally {
                 clean( keys, connection );
+                CACHE_NAME_ON_CLEANING.remove(name);
                 log.info( "clean (key:{}, count:{})", name, total );
             }
 
